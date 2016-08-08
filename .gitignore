@@ -1,0 +1,16 @@
+### IDE Files ###
+.idea
+*.iml
+.vscode
+
+### Build artifacts ###
+/bin
+/build
+
+### NPM files ###
+/node_modules
+npm-debug.log
+
+### MAAAAC ###
+.DS_Store
+old.js

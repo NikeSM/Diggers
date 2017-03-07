@@ -1,9 +1,9 @@
 export module resources {
-let resourceCache = {};
+  'use strict';
+  let resourceCache = {};
   let readyCallbacks: Array<Function> = [];
 
-  // Load an image url or an array of image urls
-  export function load(resouces: Array<string>) {
+  export function load(resouces: Array<string>): void {
       resouces.forEach((url) => _load(url));
   }
 
@@ -11,20 +11,20 @@ let resourceCache = {};
     let img: HTMLImageElement = new Image();
     img.onload = () => {
       resourceCache[url] = img;
-      (isReady()) && readyCallbacks.forEach((cb) => cb())
+      isReady() && readyCallbacks.forEach(callback => callback());
       };
     resourceCache[url] = false;
     img.src = url;
   }
 
-  function _load(url: string) {
+  function _load(url: string): any {
     if (resourceCache[url]) {
-      return resourceCache[url]
+      return resourceCache[url];
     }
     _checkImg(url);
   }
 
-  export function get(url: string) {
+  export function get(url: string): any {
     return resourceCache[url];
   }
 

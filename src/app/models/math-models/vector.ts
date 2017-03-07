@@ -1,8 +1,8 @@
 export class Vector {
-  private x: number;
-  private y: number;
+  public x: number;
+  public y: number;
 
-  constructor(x, y) {
+  constructor(x: number, y: number) {
     this.x = x || 0;
     this.y = y || 0;
   }
@@ -16,7 +16,7 @@ export class Vector {
       new Vector(this.x + v.x, this.y + v.y) :
       new Vector(this.x + v, this.y + v);
   }
-  
+
   public subtract(v: Vector | number): Vector {
     return (v instanceof Vector) ?
       new Vector(this.x - v.x, this.y - v.y) :
@@ -36,7 +36,7 @@ export class Vector {
   }
 
   public equals(v: Vector): boolean {
-    return this.x == v.x && this.y == v.y ;
+    return this.x === v.x && this.y === v.y ;
   }
 
   public dot(v: Vector): number {

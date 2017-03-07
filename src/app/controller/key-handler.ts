@@ -1,47 +1,40 @@
-export module input {
-  var pressedKeys = {};
+export class Handlers {
+  private pressedKeys: {[key: string]: boolean} = {};
 
-  function setKey(event, status) {
-    var code = event.keyCode;
-    var key;
-
-    switch (code) {
-      case 32:
-        key = 'SPACE';
-        break;
-      case 37:
-        key = 'LEFT';
-        break;
-      case 38:
-        key = 'UP';
-        break;
-      case 39:
-        key = 'RIGHT';
-        break;
-      case 40:
-        key = 'DOWN';
-        break;
-      default:
-        // Convert ASCII codes to letters
-        key = String.fromCharCode(code);
-    }
-
-    pressedKeys[key] = status;
+  constructor() {
+    this.setKey = this.setKey.bind(this);
+    this.isDown = this.isDown.bind(this);
+    window.addEventListener('blur', () => this.pressedKeys = {});
+    document.addEventListener('keydown', (e) => this.setKey(e, true));
+    document.addEventListener('keyup', (e) => this.setKey(e, false));
+  }
+  public isDown(key: string): boolean {
+    return this.pressedKeys[key.toUpperCase()];
   }
 
-  document.addEventListener('keydown', function (e) {
-    setKey(e, true);
-  });
+  private setKey(event: KeyboardEvent, status: boolean): void {
+    let code: number = event.keyCode;
+    let key;
 
-  document.addEventListener('keyup', function (e) {
-    setKey(e, false);
-  });
-
-  window.addEventListener('blur', function () {
-    pressedKeys = {};
-  });
-
-  export function isDown(key) {
-    return pressedKeys[key.toUpperCase()];
+    switch (code) {
+    case 32:
+      key = 'SPACE';
+      break;
+    case 37:
+      key = 'LEFT';
+      break;
+    case 38:
+      key = 'UP';
+      break;
+    case 39:
+      key = 'RIGHT';
+      break;
+    case 40:
+      key = 'DOWN';
+      break;
+    default:
+      key = String.fromCharCode(code);
+    }
+    this.pressedKeys[key] = status;
   }
 }

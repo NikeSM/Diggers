@@ -1,38 +1,31 @@
-export module resources {
-  'use strict';
-  let resourceCache = {};
-  let readyCallbacks: Array<Function> = [];
+import { imageResourceType } from './images/index';
 
-  export function load(resouces: Array<string>): void {
-      resouces.forEach((url) => _load(url));
+export class Resources {
+  public static images: imageResourceType;
+  private  static readyCallbacks: Array<Function> = [];
+  private static imageCache: {[key: string]: HTMLImageElement};
+  private static imageFolder: string = '/img/';
+
+  public static load(): void {
+    let imageArray = ['tank.png', 'wall.png', 'background.png'];
+    let imagePromises = imageArray.map(name => {
+      return new Promise((resolve, reject) => {
+        let img: HTMLImageElement = new Image();
+        img.onload = () => {
+          this.imageCache[name] = img;
+          resolve();
+        };
+        img.src = this.imageFolder + name;
+      });
+    });
+    Promise.all(imagePromises).then(() =>  this.readyCallbacks.map(callback => callback()));
   }
 
-  function _checkImg(url: string): void {
-    let img: HTMLImageElement = new Image();
-    img.onload = () => {
-      resourceCache[url] = img;
-      isReady() && readyCallbacks.forEach(callback => callback());
-      };
-    resourceCache[url] = false;
-    img.src = url;
+  public static addOnReadyListener(callback: Function): void {
+    this.readyCallbacks.push(callback);
   }
 
-  function _load(url: string): any {
-    if (resourceCache[url]) {
-      return resourceCache[url];
-    }
-    _checkImg(url);
-  }
-
-  export function get(url: string): any {
-    return resourceCache[url];
-  }
-
-  export function isReady(): boolean {
-    return !Object.keys(resourceCache).filter((key) => !resourceCache[key]).length;
-  }
-
-  export function onReady(callback: Function): void {
-    readyCallbacks.push(callback);
+  public static get(imageName: string): HTMLImageElement {
+    return this.imageCache[imageName];
   }
 }

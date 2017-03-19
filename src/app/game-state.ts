@@ -3,8 +3,6 @@ import {Unit} from './models/unit';
 
 export module gameState {
 'use strict';
-  export let canvas = null;
-  export let staticCanvas = null;
 
   // export let player = {
   //   pos: [0, 0],

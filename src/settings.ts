@@ -1,5 +1,5 @@
 export module settings {
-  export let playerSpeed = 200;
-  export let canvasWidth = 512;
-  export let canvasHeight = 480;
+  'use strict';
+  export let canvasWidth = 1000;
+  export let canvasHeight = 1000;
 }

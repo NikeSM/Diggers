@@ -1,68 +1,65 @@
-import { resources } from '../../../resources';
-export class Sprite {
-  private spritePosition: Array<number>;
-  private size: Array<number>;
-  private animationSpeed: number;
-  private frames: Array<number>;
-  private _index: number;
-  private url: string;
-  private spriteDirection: string;
-  private once: boolean;
-  private done: boolean;
+import { Resources } from '../../../resources';
 
-  constructor(url: string,
-              spritePosition: Array<number>,
-              size: Array<number>,
-              speed?: number,
-              frames?: Array<number>,
-              spriteDirection?: string,
-              once?: boolean) {
-    this.spritePosition = spritePosition;
-    this.size = size;
-    this.animationSpeed = typeof speed === 'number' ? speed : 0;
-    this.frames = frames;
-    this._index = 0;
-    this.url = url;
-    this.spriteDirection = spriteDirection || 'horizontal';
-    this.once = once;
+export type spriteData = {
+  spritePosition: {x: number, y: number};
+  size: {x: number, y: number};
+  animationSpeed?: number;
+  framesOrder?: Array<number>;
+  imageName?: string;
+  isLoop?: boolean;
+  isAnimation: boolean;
+}
+
+export class Sprite {
+  private spritePosition: {x: number, y: number};
+  private size: {x: number, y: number};
+  private animationSpeed: number;
+  private framesOrder: Array<number>;
+  private timePass: number;
+  private url: string;
+  private isLoop: boolean;
+  private done: boolean;
+  private isAnimation: boolean;
+  private frame: number;
+
+  constructor(args: spriteData) {
+    this.spritePosition = args.spritePosition;
+    this.size = args.size;
+    this.animationSpeed = args.animationSpeed;
+    this.framesOrder = args.framesOrder;
+    this.timePass = 0;
+    this.url = args.imageName;
+    this.isLoop = args.isLoop;
+    this.isAnimation = args.isAnimation;
   }
 
   public render(context: CanvasRenderingContext2D): void {
-    let frame: number;
+    if (!this.isAnimation) {
+      this.draw(context);
+      return;
+    }
+    this.frame = this.framesOrder[this.timePass % this.animationSpeed % this.framesOrder.length];
 
-    if (this.animationSpeed > 0) {
-      let max: number = this.frames.length;
-      let idx: number = Math.floor(this._index);
-      frame = this.frames[idx % max];
-
-      if (this.once && idx >= max) {
-        this.done = true;
-        return;
-      }
-    } else {
-      frame = 0;
+    if (!this.isLoop && this.frame >= this.framesOrder.length) {
+      this.done = true;
+      return;
     }
 
-
-    let x: number = this.spritePosition[0];
-    let y: number = this.spritePosition[1];
-
-    (this.spriteDirection === 'vertical') ?
-      y += frame * this.size[1] :
-      x += frame * this.size[0];
-
-    context.drawImage(
-      resources.get(this.url),
-      x, y,
-      this.size[0], this.size[1],
-      0, 0,
-      this.size[0], this.size[1]);
-    }
-
-  public update(deltaTime: number): void {
-    this._index += this.animationSpeed * deltaTime;
+    this.draw(context);
   }
 
-  public getSize (): Array<number> { return this.size; }
+  public update(deltaTime: number): void {
+    this.timePass += deltaTime;
+  }
+
+  public getSize (): {x: number, y: number} { return this.size; }
   public isDone (): boolean { return this.done; }
+  private draw(context: CanvasRenderingContext2D): void {
+      context.drawImage(
+      Resources.get(this.url),
+      this.spritePosition.x + this.frame * this.size.x, this.spritePosition.y + this.frame * this.size.y,
+      this.size.x, this.size.y,
+      0, 0,
+      this.size.x, this.size.y);
+  }
 }

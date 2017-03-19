@@ -2,14 +2,17 @@ import { gameState } from '../game-state';
 import { settings } from '../../settings';
 import { Vector } from '../models/math-models/vector';
 import { Unit } from '../models/unit';
+import { appContextsType } from '../../index';
 
 export class Renderer {
-  private context: CanvasRenderingContext2D;
- constructor(context: CanvasRenderingContext2D) {
-   this.context = context;
+  private contexts: appContextsType;
+ constructor(contexts: appContextsType) {
+   this.contexts = contexts;
  }
   public render(): void {
-    this.context.drawImage(gameState.staticCanvas, 0, 0);
+    this.contexts.drawImage(
+
+      gameState.staticCanvas, 0, 0);
     !gameState.isGameOver && this.renderEntity(gameState.player);
   }
 
@@ -17,6 +20,10 @@ export class Renderer {
     for (let i = 0; i < list.length; i++) {
       this.renderEntity(list[i]);
     }
+  }
+
+  private renderBackground(): void {
+    this.contexts.background.drawImage()
   }
 
   private renderEntity(entity: Unit): void {

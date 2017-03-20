@@ -1,13 +1,14 @@
 var path = require('path');
 var webpack = require('webpack');
 if(typeof Promise === 'undefined') {
- // require('es6-promise').polyfill();
+ require('es6-promise').polyfill();
 }
 
 module.exports = {
   entry: {
     'index': './src/index.ts'
   },
+  devtool: 'inline-source-map',
   output: {
     path: path.resolve(__dirname, 'bin'),
     filename: 'index.js'

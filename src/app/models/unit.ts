@@ -34,10 +34,10 @@ export class Unit {
   public getSpeed(): Vector { return this.speed; }
 
 
-  public deleteUnit (callback: Function): void {
-    callback();
-    delete this;
-  }
+  // public deleteUnit (callback: Function): void {
+  //   callback();
+  //   delete this;
+  // }
 
   public update(deltaTime: number): void {
     this.position = this.position.add(this.speed.multiply(deltaTime));

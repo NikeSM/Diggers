@@ -1,5 +1,5 @@
-import { Sprite } from './models/animation/sprite';
 import {Unit} from './models/unit';
+import { Resources } from '../../build/resources/index';
 
 export module gameState {
 'use strict';
@@ -9,7 +9,7 @@ export module gameState {
   //   sprite: new Sprite('img/sprites.png', [0, 0], [39, 39], 16, [0, 1])
   // };
 
-  export let player = new Unit({sprite: new Sprite('img/tank_1.png', [0, 0], [68, 41])});
+  export let player = new Unit({sprite: Resources.images.tanks.tank});
 
   export let bullets: Array<any> = [];
   export let enemies: Array<any> = [];

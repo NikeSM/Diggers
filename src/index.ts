@@ -1,9 +1,8 @@
-import { gameState } from './app/game-state';
 import { update } from './app/start/update';
 import { Handlers } from './app/controller/key-handler';
 import { Renderer } from './app/start/render';
 import { settings } from './settings';
-import { resources } from './resources';
+import { Resources } from './resources';
 
 export type appCanvasesType = {
   main: HTMLCanvasElement,
@@ -62,6 +61,6 @@ class AppStart {
 }
 
 window.onload = () => {
-  resources.load(['img/terrain.jpg', 'img/sprites.png', 'img/tank_1.png', 'img/wall.png', 'img/background.png']);
-  resources.onReady(new AppStart().init);
+  Resources.load();
+  Resources.addOnReadyListener(() => new AppStart().init());
 };

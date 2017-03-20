@@ -6,6 +6,7 @@
 ### Build artifacts ###
 /bin
 /build
+/public
 
 ### NPM files ###
 /node_modules

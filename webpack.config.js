@@ -10,7 +10,7 @@ module.exports = {
   },
   devtool: 'inline-source-map',
   output: {
-    path: path.resolve(__dirname, 'bin'),
+    path: path.resolve(__dirname, 'public'),
     filename: 'index.js'
   },
   resolve: {
@@ -29,6 +29,10 @@ module.exports = {
         test: /\.ts$/,
         exclude: /node_modules/,
         loader: 'ts-loader'
+      },
+      {
+        test: /\.(png|gif)$/,
+        loader: 'url-loader?limit=100000'
       }
     ]
   },

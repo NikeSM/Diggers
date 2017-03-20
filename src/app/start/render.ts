@@ -1,9 +1,8 @@
 import { gameState } from '../game-state';
 import { Vector } from '../models/math-models/vector';
 import { Unit } from '../models/unit';
-import { appContextsType } from '../../index';
-import { Resources } from '../../../build/resources/index';
-import { appCanvasesType } from '../../../build/index';
+import { appContextsType, appCanvasesType } from '../../index';
+import { Resources } from '../../resources/index';
 
 export class Renderer {
   private contexts: appContextsType;

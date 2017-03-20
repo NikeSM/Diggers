@@ -1,5 +1,5 @@
 import {Unit} from './models/unit';
-import { Resources } from '../../build/resources/index';
+import { Resources } from '../resources/index';
 
 export module gameState {
 'use strict';

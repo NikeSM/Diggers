@@ -4,7 +4,7 @@ export class Resources {
   public static images: imageResourceType;
   private  static readyCallbacks: Array<Function> = [];
   private static imageCache: {[key: string]: HTMLImageElement};
-  private static imageFolder: string = '/img/';
+  private static imageFolder: string = './images/';
 
   public static load(): void {
     let imageArray = ['tank.png', 'wall.png', 'background.png'];

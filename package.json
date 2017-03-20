@@ -9,16 +9,18 @@
     "build/"
   ],
   "scripts": {
-    "build": "./node_modules/webpack/bin/webpack.js && tsc"
+    "build": "./node_modules/webpack/bin/webpack.js && cp index.html public/index.html"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@types/es6-promise": "0.0.32",
     "es6-promise": "^4.1.0",
     "ts-loader": "^2.0.2",
     "tslint": "3.7.1",
     "tslint-loader": "^2.1.3",
     "typescript": "^2.2.0",
+    "url-loader": "0.5.7",
     "webpack": "^1.12.12"
   }
 }

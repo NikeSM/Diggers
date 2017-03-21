@@ -65,5 +65,5 @@ class AppStart {
 window.onload = () => {
   Resources.load();
   Resources.addOnReadyListener(() => new AppStart().init());
-  gameState.setPlayer(new Unit({sprite:Resources.getImages().tanks.tank}));
+  gameState.setPlayer(new Unit({sprite: Resources.getImages().tanks.tank}));
 };

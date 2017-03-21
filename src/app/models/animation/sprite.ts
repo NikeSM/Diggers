@@ -1,4 +1,5 @@
 import { Resources } from '../../../resources';
+import { Vector } from '../math-models/vector';
 
 export type spriteData = {
   spritePosition: {x: number, y: number};
@@ -36,10 +37,10 @@ export class Sprite {
     this.update = this.update.bind(this);
   }
 
-  public render(context: CanvasRenderingContext2D): void {
+  public render(context: CanvasRenderingContext2D, drawPoint: Vector = new Vector(0, 0)): void {
     if (!this.isAnimation) {
       this.frame = 0;
-      this.draw(context);
+      this.draw(context, drawPoint);
       return;
     }
     this.frame = this.framesOrder[this.timePass % this.animationSpeed % this.framesOrder.length];
@@ -49,7 +50,7 @@ export class Sprite {
       return;
     }
 
-    this.draw(context);
+    this.draw(context, drawPoint);
   }
 
   public update(deltaTime: number): void {
@@ -58,12 +59,13 @@ export class Sprite {
 
   public getSize (): {x: number, y: number} { return this.size; }
   public isDone (): boolean { return this.done; }
-  private draw(context: CanvasRenderingContext2D): void {
+  private draw(context: CanvasRenderingContext2D, drawPoint: Vector): void {
       context.drawImage(
       Resources.get(this.url),
       this.spritePosition.x + this.frame * this.size.x, this.spritePosition.y + this.frame * this.size.y,
-      this.size.x, this.size.y,
-      0, 0,
-      this.size.x, this.size.y);
+        // Позиция на спрайте
+      this.size.x, this.size.y, // размер на спрайте
+      drawPoint.x, drawPoint.y, // координаты левого верхнего угла на канвасе
+      this.size.x, this.size.y); //
   }
 }

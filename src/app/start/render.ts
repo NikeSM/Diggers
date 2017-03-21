@@ -7,14 +7,15 @@ import { Resources } from '../../resources/index';
 export class Renderer {
   private contexts: appContextsType;
   private canvases: appCanvasesType;
- constructor(contexts: appContextsType) {
+ constructor(contexts: appContextsType, canvases: appCanvasesType) {
    this.contexts = contexts;
+   this.canvases = canvases;
  }
   public render(): void {
     this.renderBackground();
     this.contexts.main.drawImage(this.canvases.background, 0, 0);
     // this.contexts.main.drawImage(this.contexts.fixed, 0, 0);
-    this.renderEntity(gameState.player);
+    this.renderEntity(gameState.getPlayer());
   }
 
   private renderEntities(list: Array<Unit>): void {
@@ -24,7 +25,7 @@ export class Renderer {
   }
 
   private renderBackground(): void {
-    Resources.images.backgrounds.background.render(this.contexts.background);
+    Resources.getImages().backgrounds.background.render(this.contexts.background);
   }
 
   private renderEntity(entity: Unit): void {

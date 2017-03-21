@@ -4,18 +4,18 @@ import { direction } from '../models/math-models/direction';
 
 export function handleInput(handlers: Handlers): void {
   if (handlers.isDown('DOWN') || handlers.isDown('s')) {
-    gameState.player.rotate(direction.DOWN);
+    gameState.getPlayer().rotate(direction.DOWN);
   }
 
   if (handlers.isDown('UP') || handlers.isDown('w')) {
-    gameState.player.rotate(direction.UP);
+    gameState.getPlayer().rotate(direction.UP);
   }
 
   if (handlers.isDown('LEFT') || handlers.isDown('a')) {
-    gameState.player.rotate(direction.LEFT);
+    gameState.getPlayer().rotate(direction.LEFT);
   }
 
   if (handlers.isDown('RIGHT') || handlers.isDown('d')) {
-    gameState.player.rotate(direction.RIGHT);
+    gameState.getPlayer().rotate(direction.RIGHT);
   }
 }

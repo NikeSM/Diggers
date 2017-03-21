@@ -3,6 +3,9 @@ import { Handlers } from './app/controller/key-handler';
 import { Renderer } from './app/start/render';
 import { settings } from './settings';
 import { Resources } from './resources';
+import { gameState } from './app/game-state';
+import { Unit } from './app/models/unit';
+import { Sprite } from './app/models/animation/sprite';
 
 export type appCanvasesType = {
   main: HTMLCanvasElement,
@@ -19,7 +22,7 @@ export type appContextsType = {
 
 class AppStart {
   private canvases: appCanvasesType;
-  private contexts: appContextsType;
+  private contexts: appContextsType = {main: null, fixed: null, background: null, ground: null};
   private lastTime: number;
   private handlers: Handlers = new Handlers();
   private renderer: Renderer;
@@ -39,7 +42,7 @@ class AppStart {
 
     this.init = this.init.bind(this);
     this.main = this.main.bind(this);
-    this.renderer = new Renderer(this.contexts);
+    this.renderer = new Renderer(this.contexts, this.canvases);
   }
 
   public init(): void {
@@ -63,4 +66,5 @@ class AppStart {
 window.onload = () => {
   Resources.load();
   Resources.addOnReadyListener(() => new AppStart().init());
+  gameState.setPlayer(new Unit({sprite:Resources.getImages().tanks.tank}));
 };

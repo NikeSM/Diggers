@@ -1,22 +1,28 @@
-import {Unit} from './models/unit';
-import { Resources } from '../resources/index';
+import { Unit } from './models/unit';
 
-export module gameState {
-'use strict';
+export class GameState {
+  private player: Unit;
+  private gameTime: number;
 
-  // export let player = {
-  //   pos: [0, 0],
-  //   sprite: new Sprite('img/sprites.png', [0, 0], [39, 39], 16, [0, 1])
-  // };
+  constructor() {
+    //
+  }
 
-  export let player = new Unit({sprite: Resources.images.tanks.tank});
+  public getPlayer(): Unit {
+    return this.player;
+  }
 
-  export let bullets: Array<any> = [];
-  export let enemies: Array<any> = [];
-  export let explosions: Array<any> = [];
+  public setPlayer(player: Unit): void {
+    this.player = player;
+  }
 
-  export let lastFire: number = Date.now();
-  export let gameTime: number = 0;
-  export let isGameOver: boolean;
+  public getTime(): number {
+    return this.gameTime;
+  }
 
+  public setTime(time: number): void {
+    this.gameTime = time;
+  }
 }
+
+export let gameState = new GameState();

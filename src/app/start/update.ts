@@ -4,7 +4,7 @@ import { handleInput } from '../controller/index';
 import { Handlers } from '../controller/key-handler';
 
 export function update(deltaTime: number, handlers: Handlers): void {
-  gameState.gameTime += deltaTime;
+  gameState.setTime(gameState.getTime() + deltaTime);
 
   handleInput(handlers);
   updateEntities(deltaTime);
@@ -12,5 +12,5 @@ export function update(deltaTime: number, handlers: Handlers): void {
 }
 
 function updateEntities(deltaTime: number): void {
-  gameState.player.update(deltaTime);
+  gameState.getPlayer().update(deltaTime);
 }

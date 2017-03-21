@@ -1,9 +1,9 @@
-import { imageResourceType } from './images/index';
+import { imageResourceType, images } from './images/index';
 
 export class Resources {
-  public static images: imageResourceType;
-  private  static readyCallbacks: Array<Function> = [];
-  private static imageCache: {[key: string]: HTMLImageElement};
+  private static images: imageResourceType;
+  private static readyCallbacks: Array<Function> = [];
+  private static imageCache: {[key: string]: HTMLImageElement} = {};
   private static imageFolder: string = './images/';
 
   public static load(): void {
@@ -12,20 +12,25 @@ export class Resources {
       return new Promise((resolve, reject) => {
         let img: HTMLImageElement = new Image();
         img.onload = () => {
-          this.imageCache[name] = img;
+          Resources.imageCache[name] = img;
           resolve();
         };
-        img.src = this.imageFolder + name;
+        img.src = Resources.imageFolder + name;
       });
     });
     Promise.all(imagePromises).then(() =>  this.readyCallbacks.map(callback => callback()));
+    Resources.images = images;
   }
 
   public static addOnReadyListener(callback: Function): void {
-    this.readyCallbacks.push(callback);
+    Resources.readyCallbacks.push(callback);
   }
 
   public static get(imageName: string): HTMLImageElement {
-    return this.imageCache[imageName];
+    return Resources.imageCache[imageName];
+  }
+
+  public static getImages(): imageResourceType {
+    return Resources.images;
   }
 }

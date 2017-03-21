@@ -24,7 +24,7 @@ export class Unit {
     this.sprite = options.sprite;
     this.position = options.position || new Vector(0, 0);
     this.speed = new Vector(0, 0);
-    this.accelerate = 5;
+    this.accelerate = 1;
     this.direction = direction.RIGHT;
   }
 

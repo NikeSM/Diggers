@@ -5,7 +5,7 @@ export type backgroundImagesNamespace = {
 export const backgrounds: backgroundImagesNamespace = {
   background: new Sprite({
     spritePosition: {x: 0, y: 0},
-    size: {x: 1000, y: 10000},
+    size: {x: 500, y: 500},
     isAnimation: false,
     imageName: 'background.png'
   })

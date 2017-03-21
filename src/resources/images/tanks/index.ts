@@ -7,7 +7,7 @@ export type tanksImagesNamespace = {
 export const tanks: tanksImagesNamespace = {
   tank: new Sprite({
     spritePosition: {x: 0, y: 0},
-    size: {x: 20, y: 20},
+    size: {x: 100, y: 100},
     isAnimation: false,
     imageName: 'tank.png'
   })

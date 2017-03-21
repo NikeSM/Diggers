@@ -31,10 +31,14 @@ export class Sprite {
     this.url = args.imageName;
     this.isLoop = args.isLoop;
     this.isAnimation = args.isAnimation;
+    this.draw = this.draw.bind(this);
+    this.render = this.render.bind(this);
+    this.update = this.update.bind(this);
   }
 
   public render(context: CanvasRenderingContext2D): void {
     if (!this.isAnimation) {
+      this.frame = 0;
       this.draw(context);
       return;
     }

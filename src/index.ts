@@ -5,7 +5,6 @@ import { settings } from './settings';
 import { Resources } from './resources';
 import { gameState } from './app/game-state';
 import { Unit } from './app/models/unit';
-import { Sprite } from './app/models/animation/sprite';
 
 export type appCanvasesType = {
   main: HTMLCanvasElement,

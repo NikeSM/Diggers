@@ -2,8 +2,8 @@ import { Resources } from '../../../resources';
 import { Vector } from '../math-models/vector';
 
 export type spriteData = {
-  spritePosition: {x: number, y: number};
-  size: {x: number, y: number};
+  spritePosition: Vector;
+  size: Vector;
   animationSpeed?: number;
   framesOrder?: Array<number>;
   imageName?: string;
@@ -12,8 +12,8 @@ export type spriteData = {
 }
 
 export class Sprite {
-  private spritePosition: {x: number, y: number};
-  private size: {x: number, y: number};
+  private spritePosition: Vector;
+  private size: Vector;
   private animationSpeed: number;
   private framesOrder: Array<number>;
   private timePass: number;
@@ -37,10 +37,10 @@ export class Sprite {
     this.update = this.update.bind(this);
   }
 
-  public render(context: CanvasRenderingContext2D, drawPoint: Vector = new Vector(0, 0)): void {
+  public render(context: CanvasRenderingContext2D, drawPoint: Vector, drawSize: Vector): void {
     if (!this.isAnimation) {
       this.frame = 0;
-      this.draw(context, drawPoint);
+      this.draw(context, drawPoint, drawSize);
       return;
     }
     this.frame = this.framesOrder[this.timePass % this.animationSpeed % this.framesOrder.length];
@@ -50,7 +50,7 @@ export class Sprite {
       return;
     }
 
-    this.draw(context, drawPoint);
+    this.draw(context, drawPoint, drawSize);
   }
 
   public update(deltaTime: number): void {
@@ -59,13 +59,13 @@ export class Sprite {
 
   public getSize (): {x: number, y: number} { return this.size; }
   public isDone (): boolean { return this.done; }
-  private draw(context: CanvasRenderingContext2D, drawPoint: Vector): void {
+  private draw(context: CanvasRenderingContext2D, drawPoint: Vector, drawSize: Vector): void {
       context.drawImage(
       Resources.get(this.url),
       this.spritePosition.x + this.frame * this.size.x, this.spritePosition.y + this.frame * this.size.y,
         // Позиция на спрайте
       this.size.x, this.size.y, // размер на спрайте
       drawPoint.x, drawPoint.y, // координаты левого верхнего угла на канвасе
-      this.size.x, this.size.y); //
+      drawSize.x, drawSize.y); // размер на канвасу
   }
 }

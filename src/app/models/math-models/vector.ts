@@ -74,7 +74,7 @@ export class Vector {
   // }
 
   public angleTo(a: Vector): number {
-    return Math.acos(this.dot(a) / (this.length() * a.length()));
+    return Math.atan2(this.y - a.y, this.x - a.y);
   }
 
   public toArray(n: number): Array<number> {
@@ -84,8 +84,22 @@ export class Vector {
   public clone(): Vector {
     return new Vector(this.x, this.y);
   }
+
   public init(x: number, y: number): Vector {
     this.x = x; this.y = y;
     return this;
+  }
+
+  public increase(n: number): Vector {
+    let length = this.length();
+    return this.setLength(length + n);
+  }
+
+  public setLength(l: number): Vector {
+    return this.clone().unit().multiply(l);
+  }
+
+  public isNullVector(): boolean {
+    return this.equals(new Vector(0, 0));
   }
 }

@@ -25,13 +25,14 @@ export class Renderer {
   }
 
   private renderBackground(): void {
-    Resources.getImages().backgrounds.background.render(this.contexts.background);
+    Resources.getImages().backgrounds.background
+      .render(this.contexts.background, new Vector(0, 0), new Vector(500, 500));
   }
 
   private renderEntity(entity: Unit): void {
     this.contexts.main.save();
     this.contexts.main.translate(entity.getPosition().x, entity.getPosition().y);
-    this.contexts.main.rotate(entity.getSpeed().angleTo(new Vector(1, 0)));
+    this.contexts.main.rotate(entity.getDirection().angleTo(new Vector(1, 0)));
     entity.render(this.contexts.main);
     this.contexts.main.restore();
   }

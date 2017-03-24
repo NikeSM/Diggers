@@ -1,4 +1,4 @@
-import { Unit } from '../unit';
+import { Tank } from './index';
 
 let sampleTankSettings = {
   maxSpeed: 100,
@@ -10,7 +10,7 @@ let sampleTankSettings = {
 };
 
 
-export class sampleTank extends Unit {
+export class sampleTank extends Tank {
   constructor() {
 
   }

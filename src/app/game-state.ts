@@ -3,6 +3,7 @@ import { Unit } from './models/unit';
 export class GameState {
   private player: Unit;
   private gameTime: number;
+  private staticUnits: Array<Unit> = [];
 
   constructor() {
     //
@@ -14,6 +15,14 @@ export class GameState {
 
   public setPlayer(player: Unit): void {
     this.player = player;
+  }
+
+  public addStaticUnit(unit: Unit) {
+    this.staticUnits.push(unit);
+  }
+
+  public getStaticUnits(): Array<Unit> {
+    return this.staticUnits;
   }
 
   public getTime(): number {

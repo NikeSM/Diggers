@@ -11,16 +11,21 @@ export class Renderer {
    this.contexts = contexts;
    this.canvases = canvases;
  }
-  public render(): void {
+  public preRender() {
     this.renderBackground();
-    this.contexts.main.drawImage(this.canvases.background, 0, 0);
-    // this.contexts.main.drawImage(this.contexts.fixed, 0, 0);
-    this.renderEntity(gameState.getPlayer());
+    this.renderStaticObjects();
   }
 
-  private renderEntities(list: Array<Unit>): void {
+  public render(): void {
+    this.contexts.main.drawImage(this.canvases.background, 0, 0);
+    this.contexts.main.drawImage(this.canvases.fixed, 0, 0);
+    this.renderEntity(gameState.getPlayer(), this.contexts.main);
+  }
+
+
+  private renderEntities(list: Array<Unit>, context: CanvasRenderingContext2D): void {
     for (let i = 0; i < list.length; i++) {
-      this.renderEntity(list[i]);
+      this.renderEntity(list[i], context);
     }
   }
 
@@ -29,11 +34,15 @@ export class Renderer {
       .render(this.contexts.background, new Vector(0, 0), new Vector(500, 500));
   }
 
-  private renderEntity(entity: Unit): void {
-    this.contexts.main.save();
-    this.contexts.main.translate(entity.getPosition().x, entity.getPosition().y);
-    this.contexts.main.rotate(entity.getDirection().angleTo(new Vector(1, 0)));
-    entity.render(this.contexts.main);
-    this.contexts.main.restore();
+  private renderStaticObjects() {
+   this.renderEntities(gameState.getStaticUnits(), this.contexts.fixed);
+  }
+
+  private renderEntity(entity: Unit, context: CanvasRenderingContext2D): void {
+    context.save();
+    context.translate(entity.getPosition().x, entity.getPosition().y);
+    context.rotate(entity.getDirection().angleTo(new Vector(1, 0)));
+    entity.render(context);
+    context.restore();
   }
 }

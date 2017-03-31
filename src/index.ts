@@ -5,6 +5,7 @@ import { settings } from './settings';
 import { Resources } from './resources';
 import { gameState } from './app/game-state';
 import { Unit } from './app/models/unit';
+import { Game } from './app/games/index';
 
 export type appCanvasesType = {
   main: HTMLCanvasElement,
@@ -47,6 +48,8 @@ class AppStart {
   public init(): void {
     document.body.appendChild(this.canvases.main);
     this.lastTime = Date.now();
+    Game.start();
+    this.renderer.preRender();
     this.main();
   };
 
@@ -65,5 +68,8 @@ class AppStart {
 window.onload = () => {
   Resources.load();
   Resources.addOnReadyListener(() => new AppStart().init());
-  gameState.setPlayer(new Unit({sprite: Resources.getImages().tanks.tank}));
 };
+
+function initGame() {
+
+}

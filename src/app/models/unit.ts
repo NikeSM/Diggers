@@ -10,6 +10,7 @@ export type unitOptions = {
   size?: Vector;
   max_speed?: number
   min_speed?: number
+  accelerate?: number;
 }
 
 export class Unit {
@@ -29,10 +30,10 @@ export class Unit {
     this.name = options.name || '';
     this.sprite = options.sprite;
     this.position = options.position || new Vector(0, 0);
-    this.accelerate = 0.5;
-    this.size = options.size || new Vector(100, 100);
-    this.max_speed = options.max_speed || 50;
-    this.min_speed = options.min_speed || 15;
+    this.accelerate = options.accelerate || 0;
+    this.size = options.size || new Vector(50, 50);
+    this.max_speed = options.max_speed || 0;
+    this.min_speed = options.min_speed || 0;
     this.direction = direction.RIGHT;
     this.speed = this.direction;
   }
@@ -51,9 +52,8 @@ export class Unit {
   // }
 
   public update(deltaTime: number): void {
-    console.log('position', this.position);
     this.position = this.position.add(this.speed.multiply(deltaTime));
-    this.speed = this.speed.increase(this.accelerate);
+    this.speed = this.speed.increase(this.accelerate * deltaTime);
     this.speed = this.speed.length() < this.max_speed ? this.speed : this.speed.setLength(this.max_speed);
     this.sprite.update(deltaTime);
   }

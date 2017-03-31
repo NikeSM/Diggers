@@ -6,7 +6,7 @@ export type wallImagesNamespace = {
 export const walls: wallImagesNamespace = {
   wall: new Sprite({
     spritePosition: new Vector(0, 0),
-    size: new Vector(20, 20),
+    size: new Vector(100, 100),
     isAnimation: false,
     imageName: 'wall.png'
   })

@@ -2,19 +2,15 @@ import { Unit } from '../unit';
 import { Vector } from '../math-models/vector';
 import { Sprite } from '../animation/sprite';
 
-export type tankOptions = {
+export type wallOptions = {
   sprite: Sprite;
   name?: string;
   position?: Vector;
   size?: Vector;
-  max_speed?: number;
-  min_speed?: number;
-  shotTimeout?: number;
-  accelerate?: number;
 }
 
-export class Tank extends Unit {
-  constructor(args: tankOptions) {
+export class Wall extends Unit {
+  constructor(args: wallOptions) {
     super(args);
   }
 }

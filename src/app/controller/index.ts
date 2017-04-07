@@ -1,21 +1,21 @@
-import { gameState } from '../game-state';
 import { Handlers} from './key-handler';
 import { direction } from '../models/math-models/direction';
+import { game } from '../../index';
 
 export function handleInput(handlers: Handlers): void {
   if (handlers.isDown('DOWN') || handlers.isDown('s')) {
-    gameState.getPlayer().rotate(direction.DOWN);
+    game.getGameState().getPlayer().rotate(direction.DOWN);
   }
 
   if (handlers.isDown('UP') || handlers.isDown('w')) {
-    gameState.getPlayer().rotate(direction.UP);
+    game.getGameState().getPlayer().rotate(direction.UP);
   }
 
   if (handlers.isDown('LEFT') || handlers.isDown('a')) {
-    gameState.getPlayer().rotate(direction.LEFT);
+    game.getGameState().getPlayer().rotate(direction.LEFT);
   }
 
   if (handlers.isDown('RIGHT') || handlers.isDown('d')) {
-    gameState.getPlayer().rotate(direction.RIGHT);
+    game.getGameState().getPlayer().rotate(direction.RIGHT);
   }
 }

@@ -1,4 +1,4 @@
-import { Unit } from './models/unit';
+import { Unit } from '../models/unit';
 
 export class GameState {
   private player: Unit;
@@ -17,7 +17,7 @@ export class GameState {
     this.player = player;
   }
 
-  public addStaticUnit(unit: Unit) {
+  public addStaticUnit(unit: Unit): void {
     this.staticUnits.push(unit);
   }
 
@@ -33,5 +33,3 @@ export class GameState {
     this.gameTime = time;
   }
 }
-
-export let gameState = new GameState();

@@ -2,6 +2,7 @@ import { generateId } from '../../utils';
 import { Vector } from '../models/math-models/vector';
 import { Sprite } from './animation/sprite';
 import { direction } from './math-models/direction';
+import { CollisionChecker } from '../collisions/check-collisions';
 
 export type unitOptions = {
   sprite: Sprite;
@@ -24,6 +25,7 @@ export class Unit {
   private max_speed: number;
   private min_speed: number;
   private direction: Vector;
+  private oldPosition: Vector;
 
   constructor(options: unitOptions) {
     this.id = generateId();
@@ -41,6 +43,7 @@ export class Unit {
   public getId(): string { return this.id; }
   public getName(): string { return this.name; }
   public getPosition(): Vector { return this.position; }
+  public getSize(): Vector { return this.size; }
   public getSpeed(): Vector { return this.speed; }
   public getDrawPoint(): Vector {
     return new Vector(-this.size.x / 2, -this.size.y / 2);
@@ -52,6 +55,8 @@ export class Unit {
   // }
 
   public update(deltaTime: number): void {
+    CollisionChecker.collisionWithStatic(this);
+    this.oldPosition = this.position.clone();
     this.position = this.position.add(this.speed.multiply(deltaTime));
     this.speed = this.speed.increase(this.accelerate * deltaTime);
     this.speed = this.speed.length() < this.max_speed ? this.speed : this.speed.setLength(this.max_speed);
@@ -96,5 +101,11 @@ export class Unit {
 
   public getDirection(): Vector {
     return this.direction;
+  }
+
+  public stop(): void {
+    this.speed = new Vector(0, 0);
+    // this.accelerate = 0;
+    this.position = this.oldPosition;
   }
 }

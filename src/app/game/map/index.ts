@@ -1,10 +1,8 @@
-import { GameState } from '../game-state';
 import { Resources } from '../../../resources/index';
 import { Tank } from '../../models/tanks/index';
 import { Wall } from '../../models/walls/index';
 import { Vector } from '../../models/math-models/vector';
 import { settings } from '../../../settings';
-import { Updater } from '../../start/update';
 import { Game } from '../index';
 import { game } from '../../../index';
 

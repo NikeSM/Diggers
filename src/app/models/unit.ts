@@ -1,5 +1,5 @@
 import { generateId } from '../../utils';
-import { Vector } from '../models/math-models/vector';
+import { Vector } from './math-models/vector';
 import { Sprite } from './animation/sprite';
 import { direction } from './math-models/direction';
 import { CollisionChecker } from '../collisions/check-collisions';
@@ -25,7 +25,6 @@ export class Unit {
   private max_speed: number;
   private min_speed: number;
   private direction: Vector;
-  private oldPosition: Vector;
 
   constructor(options: unitOptions) {
     this.id = generateId();
@@ -36,15 +35,30 @@ export class Unit {
     this.size = options.size || new Vector(50, 50);
     this.max_speed = options.max_speed || 0;
     this.min_speed = options.min_speed || 0;
-    this.direction = direction.RIGHT;
-    this.speed = this.direction;
+    this.setDirection(direction.RIGHT);
+    this.setSpeed(this.getDirection());
   }
 
-  public getId(): string { return this.id; }
-  public getName(): string { return this.name; }
-  public getPosition(): Vector { return this.position; }
-  public getSize(): Vector { return this.size; }
-  public getSpeed(): Vector { return this.speed; }
+  public getId(): string {
+    return this.id;
+  }
+
+  public getName(): string {
+    return this.name;
+  }
+
+  public getPosition(): Vector {
+    return this.position;
+  }
+
+  public getSize(): Vector {
+    return this.size;
+  }
+
+  public getSpeed(): Vector {
+    return this.speed;
+  }
+
   public getDrawPoint(): Vector {
     return new Vector(-this.size.x / 2, -this.size.y / 2);
   }
@@ -55,11 +69,14 @@ export class Unit {
   // }
 
   public update(deltaTime: number): void {
-    CollisionChecker.collisionWithStatic(this);
-    this.oldPosition = this.position.clone();
-    this.position = this.position.add(this.speed.multiply(deltaTime));
-    this.speed = this.speed.increase(this.accelerate * deltaTime);
-    this.speed = this.speed.length() < this.max_speed ? this.speed : this.speed.setLength(this.max_speed);
+    let newPosition = this.position.add(this.getSpeed().multiply(deltaTime));
+    if (!CollisionChecker.collisionWithStatic(this, newPosition)) {
+      this.position = newPosition;
+      this.setSpeed(this.getSpeed().increase(this.accelerate * deltaTime));
+      this.setSpeed(
+        this.getSpeed().length() < this.max_speed ? this.getSpeed() : this.getSpeed().setLength(this.max_speed)
+      );
+    }
     this.sprite.update(deltaTime);
   }
 
@@ -68,31 +85,31 @@ export class Unit {
   }
 
   public rotate(direction: Vector): void {
-    if (this.direction === direction) {
+    if (this.getDirection() === direction) {
       this.forward();
     } else {
-      if (this.direction.dot(direction)) {
+      if (this.getDirection().dot(direction)) {
         this.back();
       } else {
-        this.direction = direction;
-        this.speed = this.direction.setLength(this.min_speed);
+        this.setDirection(direction);
+        this.setSpeed(this.getDirection().setLength(this.min_speed));
       }
     }
   }
 
   public rotateLeft(): void {
-    this.direction = new Vector(this.direction.y, -this.direction.x);
-    this.speed = this.direction.setLength(this.min_speed);
+    this.setDirection(new Vector(this.getDirection().y, -this.getDirection().x));
+    this.setSpeed(this.getDirection().setLength(this.min_speed));
   }
 
   public rotateRight(): void {
-    this.direction = new Vector(-this.direction.y, this.direction.x);
-    this.speed = this.direction.setLength(this.min_speed);
+    this.setDirection(new Vector(-this.getDirection().y, this.getDirection().x));
+    this.setSpeed(this.getDirection().setLength(this.min_speed));
   }
 
   public forward(): void {
     this.accelerate = Math.abs(this.accelerate);
-    this.speed = this.speed.isNullVector() ? this.direction : this.speed;
+    this.setSpeed(this.getSpeed().isNullVector() ? this.getDirection() : this.getSpeed());
   }
 
   public back(): void {
@@ -104,8 +121,15 @@ export class Unit {
   }
 
   public stop(): void {
-    this.speed = new Vector(0, 0);
+    this.setSpeed(new Vector(0, 0));
     // this.accelerate = 0;
-    this.position = this.oldPosition;
+  }
+
+  private setSpeed(speed: Vector): void {
+    this.speed = speed;
+  }
+
+  private setDirection(direction: Vector): void {
+    this.direction = direction;
   }
 }

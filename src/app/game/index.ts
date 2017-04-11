@@ -1,7 +1,7 @@
 import { GameState } from './game-state';
 import { Handlers } from '../controller/key-handler';
-import { Renderer } from '../start/render';
-import { Updater } from '../start/update';
+import { Renderer } from '../start/renderer';
+import { Updater } from '../start/updater';
 import { appCanvasesType, appContextsType, Map } from './map/index';
 
 export class Game {
@@ -15,7 +15,6 @@ export class Game {
   constructor() {
     this.start = this.start.bind(this);
     this.frame = this.frame.bind(this);
-    this.renderer = new Renderer(this.contexts, this.canvases);
   }
 
   public getGameState(): GameState {
@@ -27,6 +26,7 @@ export class Game {
     map.create(this);
     this.canvases = map.getCanvases();
     this.contexts = map.getContexts();
+    this.renderer = new Renderer(this.contexts, this.canvases);
     document.body.appendChild(this.canvases.main);
     this.lastTime = Date.now();
     this.renderer.preRender();

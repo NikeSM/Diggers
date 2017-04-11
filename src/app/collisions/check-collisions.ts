@@ -1,26 +1,50 @@
 import { Unit } from '../models/unit';
 import { game } from '../../index';
+import { Vector } from '../models/math-models/vector';
+
+type isRectsCollisionArgsType = {
+  rect1: {
+    position: Vector,
+    size: Vector
+  },
+  rect2: {
+    position: Vector,
+    size: Vector
+  },
+};
+
 export class CollisionChecker {
 
-  public static collisionWithStatic(entity: Unit): void {
+  public static collisionWithStatic(entity: Unit, newPosition: Vector): boolean {
+    let isCollision = false;
     game.getGameState().getStaticUnits().map(unit => {
-      if (this.isCollision(entity, unit)) {
+      if (this.isRectsCollision({
+          rect1: {
+            position: unit.getPosition(),
+            size: unit.getSize()
+          }, rect2: {
+            position: newPosition,
+            size: entity.getSize()
+          }
+        })) {
         entity.stop();
+        isCollision = true;
       }
     });
+    return isCollision;
   }
 
-  private static  isCollision(unit1: Unit, unit2: Unit): boolean {
-    let position1 = unit1.getPosition();
-    let position2 = unit2.getPosition();
-    let size1 = unit1.getSize();
-    let size2 = unit2.getSize();
+  private static  isRectsCollision(args: isRectsCollisionArgsType): boolean {
+    let position1 = args.rect1.position;
+    let position2 = args.rect2.position;
+    let size1 = args.rect1.size;
+    let size2 = args.rect2.size;
     return (this.isProjectionsIntersections(
-      position1.x + size1.x / 2,
-      position1.x - size1.x / 2,
-      position2.x + size2.x / 2,
-      position2.x - size2.x / 2
-    )) && (this.isProjectionsIntersections(
+        position1.x + size1.x / 2,
+        position1.x - size1.x / 2,
+        position2.x + size2.x / 2,
+        position2.x - size2.x / 2
+      )) && (this.isProjectionsIntersections(
         position1.y + size1.y / 2,
         position1.y - size1.y / 2,
         position2.y + size2.y / 2,

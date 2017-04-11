@@ -1,6 +1,6 @@
 import { Vector } from '../models/math-models/vector';
 import { Unit } from '../models/unit';
-import { appContextsType, appCanvasesType } from '../game';
+import { appContextsType, appCanvasesType } from '../game/map';
 import { Resources } from '../../resources/index';
 import { game } from '../../index';
 

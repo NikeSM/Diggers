@@ -69,17 +69,17 @@ export class Unit {
   // }
 
   public update(deltaTime: number): void {
-    let newPosition = this.position.add(this.getSpeed().multiply(deltaTime));
-    if (!CollisionChecker.collisionWithStatic(this, newPosition)) {
-      this.position = newPosition;
-      this.setSpeed(this.getSpeed().increase(this.accelerate * deltaTime));
-      this.setSpeed(
-        this.getSpeed().length() < this.max_speed ? this.getSpeed() : this.getSpeed().setLength(this.max_speed)
-      );
-    }
+    this.position = this.getNewPosition(deltaTime);
+    this.setSpeed(this.getSpeed().increase(this.accelerate * deltaTime));
+    this.setSpeed(
+      this.getSpeed().length() < this.max_speed ? this.getSpeed() : this.getSpeed().setLength(this.max_speed)
+    );
     this.sprite.update(deltaTime);
   }
 
+  public getNewPosition(deltaTime: number) {
+    return this.position.add(this.getSpeed().multiply(deltaTime));
+  }
   public render(context: CanvasRenderingContext2D): void {
     this.sprite.render(context, this.getDrawPoint(), this.size);
   }

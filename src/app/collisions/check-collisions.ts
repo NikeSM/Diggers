@@ -1,6 +1,6 @@
 import { Unit } from '../models/unit';
-import { game } from '../../index';
 import { Vector } from '../models/math-models/vector';
+import { Game } from '../game/index';
 
 type isRectsCollisionArgsType = {
   rect1: {
@@ -14,10 +14,13 @@ type isRectsCollisionArgsType = {
 };
 
 export class CollisionChecker {
-
-  public static collisionWithStatic(entity: Unit, newPosition: Vector): boolean {
+  private game: Game;
+  constructor(game: Game) {
+    this.game = game;
+  }
+  public collisionWithStatic(entity: Unit, newPosition: Vector): boolean {
     let isCollision = false;
-    game.getGameState().getStaticUnits().map(unit => {
+    this.game.getGameState().getStaticUnits().map(unit => {
       if (this.isRectsCollision({
           rect1: {
             position: unit.getPosition(),
@@ -34,7 +37,7 @@ export class CollisionChecker {
     return isCollision;
   }
 
-  private static  isRectsCollision(args: isRectsCollisionArgsType): boolean {
+  private isRectsCollision(args: isRectsCollisionArgsType): boolean {
     let position1 = args.rect1.position;
     let position2 = args.rect2.position;
     let size1 = args.rect1.size;
@@ -52,7 +55,7 @@ export class CollisionChecker {
       ));
   }
 
-  private static  isProjectionsIntersections(p11: number, p12: number, p21: number, p22: number): boolean {
+  private isProjectionsIntersections(p11: number, p12: number, p21: number, p22: number): boolean {
     let l1 = Math.abs(p11 - p12);
     let l2 = Math.abs(p21 - p22);
     let l = Math.max(p11, p12, p21, p22) - Math.min(p11, p12, p21, p22);

@@ -2,14 +2,17 @@ import { Vector } from '../models/math-models/vector';
 import { Unit } from '../models/unit';
 import { appContextsType, appCanvasesType } from '../game/map';
 import { Resources } from '../../resources/index';
-import { game } from '../../index';
+import { Game } from '../game/index';
 
 export class Renderer {
   private contexts: appContextsType;
   private canvases: appCanvasesType;
- constructor(contexts: appContextsType, canvases: appCanvasesType) {
+  private game: Game;
+
+ constructor(contexts: appContextsType, canvases: appCanvasesType, game: Game) {
    this.contexts = contexts;
    this.canvases = canvases;
+   this.game = game;
  }
   public preRender(): void {
     this.renderBackground();
@@ -19,7 +22,7 @@ export class Renderer {
   public render(): void {
     this.contexts.main.drawImage(this.canvases.background, 0, 0);
     this.contexts.main.drawImage(this.canvases.fixed, 0, 0);
-    this.renderEntity(game.getGameState().getPlayer(), this.contexts.main);
+    this.renderEntity(this.game.getGameState().getPlayer(), this.contexts.main);
   }
 
 
@@ -35,7 +38,7 @@ export class Renderer {
   }
 
   private renderStaticObjects(): void {
-   this.renderEntities(game.getGameState().getStaticUnits(), this.contexts.fixed);
+   this.renderEntities(this.game.getGameState().getStaticUnits(), this.contexts.fixed);
   }
 
   private renderEntity(entity: Unit, context: CanvasRenderingContext2D): void {

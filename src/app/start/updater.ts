@@ -1,6 +1,7 @@
 import { Handlers } from '../controller/key-handler';
 import { Game } from '../game/index';
 import { CollisionChecker } from '../collisions/check-collisions';
+import { Unit } from '../models/unit';
 
 
 export class Updater {
@@ -18,6 +19,14 @@ export class Updater {
   }
 
   public updateEntities(deltaTime: number): void {
-    this.game.getGameState().getPlayer().update(deltaTime);
+    this.updateEntity(deltaTime, this.game.getGameState().getPlayer());
+  }
+
+  private updateEntity(deltaTime: number, unit: Unit): void {
+    if (this.collisionChecker.collisionWithStatic(unit, unit.getNewPosition(deltaTime))) {
+      unit.stop();
+    } else {
+      unit.update(deltaTime);
+    }
   }
 }

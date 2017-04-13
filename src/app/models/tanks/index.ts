@@ -10,7 +10,7 @@ export type tankOptions = {
   max_speed?: number;
   min_speed?: number;
   shotTimeout?: number;
-  accelerate?: number;
+  accelerate_module?: number;
 }
 
 export class Tank extends Unit {

@@ -51,7 +51,7 @@ export class Map {
     min_speed: 5,
     shotTimeout: 5,
     sprite: Resources.getImages().tanks.tank,
-    accelerate: 20
+    accelerate_module: 20
   }));
     for ( let i = 0; i < 50; i++) {
       this.game.getGameState().addStaticUnit(new Wall({

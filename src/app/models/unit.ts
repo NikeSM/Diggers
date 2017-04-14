@@ -30,10 +30,10 @@ export class Unit {
     this.id = generateId();
     this.name = options.name || '';
     this.sprite = options.sprite;
-    this.position = options.position || new Vector(0, 0);
-    this.accelerate = new Vector(0, 0);
+    this.setPosition(options.position || new Vector(0, 0));
+    this.setAccelerate(new Vector(0, 0));
     this.accelerate_module = options.accelerate_module || 0;
-    this.size = options.size || new Vector(50, 50);
+    this.setSize(options.size || new Vector(50, 50));
     this.max_speed = options.max_speed || 0;
     this.min_speed = options.min_speed || 0;
     this.setDirection(direction.RIGHT);
@@ -61,7 +61,7 @@ export class Unit {
   }
 
   public getDrawPoint(): Vector {
-    return new Vector(-this.size.x / 2, -this.size.y / 2);
+    return new Vector(-this.getSize().x / 2, -this.getSize().y / 2);
   }
 
   // public deleteUnit (callback: Function): void {
@@ -70,8 +70,8 @@ export class Unit {
   // }
 
   public update(deltaTime: number): void {
-    this.position = this.getNewPosition(deltaTime);
-    this.setSpeed(this.getSpeed().add(this.accelerate.multiply(deltaTime)));
+    this.setPosition(this.getNewPosition(deltaTime));
+    this.setSpeed(this.getSpeed().add(this.getAccelerate().multiply(deltaTime)));
     this.setSpeed(
       this.getSpeed().length() < this.max_speed ? this.getSpeed() : this.getSpeed().setLength(this.max_speed)
     );
@@ -79,11 +79,11 @@ export class Unit {
   }
 
   public getNewPosition(deltaTime: number): Vector {
-    return this.position.add(this.getSpeed().multiply(deltaTime));
+    return this.getPosition().add(this.getSpeed().multiply(deltaTime));
   }
 
   public render(context: CanvasRenderingContext2D): void {
-    this.sprite.render(context, this.getDrawPoint(), this.size);
+    this.sprite.render(context, this.getDrawPoint(), this.getSize());
   }
 
   public rotate(direction: Vector): void {
@@ -110,7 +110,7 @@ export class Unit {
   }
 
   public forward(): void {
-    this.setAccelerate(this.direction.multiply(this.accelerate_module));
+    this.setAccelerate(this.getDirection().multiply(this.accelerate_module));
     this.setSpeed(
       this.getSpeed().isNullVector() || this.getSpeed().dot(this.getDirection()) < 0 ?
         this.getDirection() :
@@ -118,9 +118,9 @@ export class Unit {
   }
 
   public back(): void {
-    this.setAccelerate(this.direction.multiply(-this.accelerate_module));
+    this.setAccelerate(this.getDirection().multiply(-this.accelerate_module));
     if (this.getSpeed().isNullVector()) {
-      this.setSpeed(this.direction.multiply(-1));
+      this.setSpeed(this.getDirection().multiply(-1));
     }
   }
 
@@ -130,7 +130,7 @@ export class Unit {
 
   public stop(): void {
     this.setSpeed(new Vector(0, 0));
-    // this.accelerate = 0;
+    this.setAccelerate(new Vector(0, 0));
   }
 
   private setSpeed(speed: Vector): void {
@@ -147,5 +147,13 @@ export class Unit {
 
   private setDirection(direction: Vector): void {
     this.direction = direction;
+  }
+
+  private setPosition(position: Vector): void {
+    this.position = position;
+  }
+
+  private setSize(size: Vector): void {
+    this.size = size;
   }
 }

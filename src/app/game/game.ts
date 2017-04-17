@@ -1,8 +1,8 @@
-import { GameState } from './game-state';
-import { Handlers } from '../controller/key-handler';
-import { Renderer } from '../start/renderer';
-import { Updater } from '../start/updater';
-import { appCanvasesType, appContextsType, Map } from './map/index';
+import { GameState } from './game-state/game-state';
+import { Handlers } from './controller/key-handler';
+import { Renderer } from './renderer/renderer';
+import { Updater } from './updater/updater';
+import { appCanvasesType, appContextsType, Map } from './map/map';
 
 export class Game {
   private canvases: appCanvasesType;

@@ -1,6 +1,6 @@
-import { Unit } from '../models/unit';
-import { Vector } from '../models/math-models/vector';
-import { Game } from '../game/index';
+import { Unit } from '../../../models/unit';
+import { Vector } from '../../../models/math-models/vector';
+import { Game } from '../../game';
 
 type isRectsCollisionArgsType = {
   rect1: {

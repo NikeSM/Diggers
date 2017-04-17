@@ -4,7 +4,8 @@
     "module": "commonjs",
     "declaration": false,
     "outDir": "./build",
-    "moduleResolution": "node"
+    "moduleResolution": "node",
+    "rootDir": "./src"
   },
   "files": [
     "./src/index.ts"

@@ -1,4 +1,4 @@
-import { Unit } from '../models/unit';
+import { Unit } from '../../models/unit';
 
 export class GameState {
   private player: Unit;

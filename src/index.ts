@@ -1,5 +1,5 @@
 import { Resources } from './resources';
-import { Game } from './app/game/index';
+import { Game } from './app/game/game';
 
 
 window.onload = () => {

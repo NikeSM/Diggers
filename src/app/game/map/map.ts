@@ -1,9 +1,9 @@
 import { Resources } from '../../../resources/index';
-import { Tank } from '../../models/tanks/index';
-import { Wall } from '../../models/walls/index';
+import { Tank } from '../../models/tanks/tank';
+import { Wall } from '../../models/walls/wall';
 import { Vector } from '../../models/math-models/vector';
 import { settings } from '../../../settings';
-import { Game } from '../index';
+import { Game } from '../game';
 
 
 export type appCanvasesType = {

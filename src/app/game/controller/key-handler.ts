@@ -1,5 +1,5 @@
-import { Game } from '../game/index';
-import { direction } from '../models/math-models/direction';
+import { Game } from '../game';
+import { direction } from '../../models/math-models/direction';
 export class Handlers {
   private pressedKeys: {[key: string]: boolean} = {};
   private game: Game;

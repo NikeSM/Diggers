@@ -1,7 +1,7 @@
 import { Handlers } from '../controller/key-handler';
-import { Game } from '../game/index';
-import { CollisionChecker } from '../collisions/check-collisions';
-import { Unit } from '../models/unit';
+import { Game } from '../game';
+import { CollisionChecker } from './collisions/check-collisions';
+import { Unit } from '../../models/unit';
 
 
 export class Updater {

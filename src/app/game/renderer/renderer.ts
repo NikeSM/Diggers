@@ -1,8 +1,8 @@
 import { Vector } from '../../models/math-models/vector';
-import { Unit } from '../../models/unit';
 import { appContextsType, appCanvasesType } from '../map/map';
 import { Resources } from '../../../resources/index';
 import { Game } from '../game';
+import { ShapeUnit } from '../../models/unit/shape-unit/shape-unit';
 
 export class Renderer {
   private contexts: appContextsType;
@@ -26,7 +26,7 @@ export class Renderer {
   }
 
 
-  private renderEntities(list: Array<Unit>, context: CanvasRenderingContext2D): void {
+  private renderEntities(list: Array<ShapeUnit>, context: CanvasRenderingContext2D): void {
     for (let i = 0; i < list.length; i++) {
       this.renderEntity(list[i], context);
     }
@@ -41,10 +41,10 @@ export class Renderer {
    this.renderEntities(this.game.getGameState().getStaticUnits(), this.contexts.fixed);
   }
 
-  private renderEntity(entity: Unit, context: CanvasRenderingContext2D): void {
+  private renderEntity(entity: ShapeUnit, context: CanvasRenderingContext2D): void {
     context.save();
-    context.translate(entity.getPosition().x, entity.getPosition().y);
-    context.rotate(entity.getDirection().angleTo(new Vector(1, 0)));
+    context.translate(entity.position.x, entity.position.y);
+    context.rotate(entity.direction.angleTo(new Vector(1, 0)));
     entity.render(context);
     context.restore();
   }

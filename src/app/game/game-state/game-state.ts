@@ -1,27 +1,27 @@
-import { Unit } from '../../models/unit';
+import { ShapeUnit } from '../../models/unit/shape-unit/shape-unit';
 
 export class GameState {
-  private player: Unit;
+  private player: ShapeUnit;
   private gameTime: number;
-  private staticUnits: Array<Unit> = [];
+  private staticUnits: Array<ShapeUnit> = [];
 
   constructor() {
     //
   }
 
-  public getPlayer(): Unit {
+  public getPlayer(): ShapeUnit {
     return this.player;
   }
 
-  public setPlayer(player: Unit): void {
+  public setPlayer(player: ShapeUnit): void {
     this.player = player;
   }
 
-  public addStaticUnit(unit: Unit): void {
+  public addStaticUnit(unit: ShapeUnit): void {
     this.staticUnits.push(unit);
   }
 
-  public getStaticUnits(): Array<Unit> {
+  public getStaticUnits(): Array<ShapeUnit> {
     return this.staticUnits;
   }
 

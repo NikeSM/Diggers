@@ -1,6 +1,6 @@
-import { Unit } from '../unit';
-import { Vector } from '../math-models/vector';
-import { Sprite } from '../animation/sprite';
+import { Vector } from '../../../math-models/vector';
+import { Sprite } from '../../../animation/sprite';
+import { shapeType, ShapeUnit } from '../shape-unit';
 
 export type tankOptions = {
   sprite: Sprite;
@@ -11,9 +11,10 @@ export type tankOptions = {
   min_speed?: number;
   shotTimeout?: number;
   accelerate_module?: number;
+  shape: shapeType;
 }
 
-export class Tank extends Unit {
+export class Tank extends ShapeUnit {
   constructor(args: tankOptions) {
     super(args);
   }

@@ -1,3 +1,4 @@
+import { Vector } from './app/models/math-models/vector';
 export module utils {
   'use strict';
   export function generateId(): string {
@@ -15,6 +16,10 @@ export module utils {
       });
     });
     return result as T;
+  }
+
+  export function 	circumscribedCircleRadius(rectSize: Vector): number {
+    return Math.sqrt(rectSize.x * rectSize. x + rectSize.y * rectSize.y);
   }
 }
 

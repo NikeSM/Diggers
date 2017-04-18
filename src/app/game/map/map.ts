@@ -1,9 +1,10 @@
 import { Resources } from '../../../resources/index';
-import { Tank } from '../../models/tanks/tank';
-import { Wall } from '../../models/walls/wall';
+import { Tank } from '../../models/unit/shape-unit/tanks/tank';
+import { Wall } from '../../models/unit/shape-unit/walls/wall';
 import { Vector } from '../../models/math-models/vector';
 import { settings } from '../../../settings';
 import { Game } from '../game';
+import { shapeType } from '../../models/unit/shape-unit/shape-unit';
 
 
 export type appCanvasesType = {
@@ -44,40 +45,45 @@ export class Map {
 
   public addStartUnits(): void {
     this.game.getGameState().setPlayer(new Tank({
-    name: 'Player',
-    position: new Vector(200, 200),
-    size: new Vector(50, 50),
-    max_speed: 200,
-    min_speed: 5,
-    shotTimeout: 5,
-    sprite: Resources.getImages().tanks.tank,
-    accelerate_module: 20
-  }));
-    for ( let i = 0; i < 50; i++) {
+      name: 'Player',
+      position: new Vector(200, 200),
+      size: new Vector(50, 50),
+      max_speed: 200,
+      min_speed: 5,
+      shotTimeout: 5,
+      sprite: Resources.getImages().tanks.tank,
+      accelerate_module: 20,
+      shape: shapeType.RECTANGLE
+    }));
+    for (let i = 0; i < 50; i++) {
       this.game.getGameState().addStaticUnit(new Wall({
         sprite: Resources.getImages().walls.wall,
         position: new Vector(5 + 10 * i, 5),
-        size: new Vector(10, 10)
+        size: new Vector(10, 10),
+        shape: shapeType.RECTANGLE
       }));
       this.game.getGameState().addStaticUnit(new Wall({
         sprite: Resources.getImages().walls.wall,
         position: new Vector(5 + 10 * i, 495),
-        size: new Vector(10, 10)
+        size: new Vector(10, 10),
+        shape: shapeType.RECTANGLE
       }));
       this.game.getGameState().addStaticUnit(new Wall({
         sprite: Resources.getImages().walls.wall,
         position: new Vector(5, 5 + 10 * i),
-        size: new Vector(10, 10)
+        size: new Vector(10, 10),
+        shape: shapeType.RECTANGLE
       }));
       this.game.getGameState().addStaticUnit(new Wall({
         sprite: Resources.getImages().walls.wall,
         position: new Vector(495, 5 + 10 * i),
-        size: new Vector(10, 10)
+        size: new Vector(10, 10),
+        shape: shapeType.RECTANGLE
       }));
     }
   }
 
-  public getCanvases (): appCanvasesType {
+  public getCanvases(): appCanvasesType {
     return this.canvases;
   }
 

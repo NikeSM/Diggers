@@ -1,6 +1,6 @@
-import { Unit } from '../../../models/unit';
 import { Vector } from '../../../models/math-models/vector';
 import { Game } from '../../game';
+import { ShapeUnit } from '../../../models/unit/shape-unit/shape-unit';
 
 type isRectsCollisionArgsType = {
   rect1: {
@@ -18,16 +18,16 @@ export class CollisionChecker {
   constructor(game: Game) {
     this.game = game;
   }
-  public collisionWithStatic(entity: Unit, newPosition: Vector): boolean {
+  public collisionWithStatic(entity: ShapeUnit, newPosition: Vector): boolean {
     let isCollision = false;
     this.game.getGameState().getStaticUnits().map(unit => {
       if (this.isRectsCollision({
           rect1: {
-            position: unit.getPosition(),
-            size: unit.getSize()
+            position: unit.position,
+            size: unit.getRectangleSize()
           }, rect2: {
             position: newPosition,
-            size: entity.getSize()
+            size: entity.getRectangleSize()
           }
         })) {
         entity.stop();

@@ -32,7 +32,7 @@ export class Unit {
   private _accelerate_module: number;
 
   constructor(options: unitOptions) {
-    let mergedOptions = utils.merge([options, defaultUnitOptions]);
+    let mergedOptions = utils.merge([defaultUnitOptions, options]);
     this.id = utils.generateId();
     this.name = mergedOptions.name;
     this.sprite = mergedOptions.sprite;

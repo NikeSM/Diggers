@@ -33,7 +33,9 @@ export class ShapeUnit extends Unit {
   constructor(options: shapeUnitOptions) {
     super(options);
     utils.merge([defaultShapeUnitOptions, options]);
-    this._radius = options.radius;
+    this.radius = options.radius;
+    this.size = options.size;
+    this.shape = options.shape;
   }
 
   public render(context: CanvasRenderingContext2D): void {
@@ -43,7 +45,7 @@ export class ShapeUnit extends Unit {
   public getDrawPoint(): Vector {
     switch (this.shape) {
       case shapeType.CIRCLE:
-        return new Vector(-this._radius, -this._radius);
+        return new Vector(-this.radius, -this.radius);
       case shapeType.RECTANGLE:
         return new Vector(-this.size.x / 2, -this.size.y / 2);
       default:
@@ -54,7 +56,7 @@ export class ShapeUnit extends Unit {
   public getRectangleSize(): Vector {
     switch (this.shape) {
       case shapeType.CIRCLE:
-        return new Vector(this._radius * 2, this._radius * 2);
+        return new Vector(this.radius * 2, this.radius * 2);
       case shapeType.RECTANGLE:
         return this.size;
       default:

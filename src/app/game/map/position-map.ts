@@ -2,38 +2,27 @@ import { Unit } from '../../models/unit/unit';
 import { Vector } from '../../models/math-models/vector';
 
 export type positionMapOptionsType = {
-  size: Vector,
-  step: number
+  step: number;
 }
 
 export class PositionMap {
+  get step(): number {
+    return this._step;
+  }
+
+  set step(value: number) {
+    this._step = value;
+  }
   private positionMapHash: {[key: string]: Array<Unit>} = {};
   private UnitPositionMapHash: {[key: string]: Array<string>} = {};
-  private step: number;
-  private size: Vector;
+  private _step: number;
 
   constructor(options: positionMapOptionsType) {
-    this.setStep(options.step);
-    this.setSize(options.size);
+    this.step = options.step;
   }
 
   public setUnitPositionMap(): void {
 
   }
 
-  private getSize(): Vector {
-    return this.size;
-  }
-
-  private setSize(size: Vector): void {
-    this.size = size;
-  }
-
-  private getStep(): number {
-    return this.step;
-  }
-
-  private setStep(step: number): void {
-    this.step = step;
-  }
 }

@@ -47,6 +47,7 @@ export class ShapeUnit extends Unit {
       case shapeType.CIRCLE:
         return new Vector(-this.radius, -this.radius);
       case shapeType.RECTANGLE:
+        // TODO Проверить, как работает с прямоугольником а не  квадратом
         return new Vector(-this.size.x / 2, -this.size.y / 2);
       default:
         return new Vector(0, 0);

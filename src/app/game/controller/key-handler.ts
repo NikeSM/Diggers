@@ -18,19 +18,19 @@ export class Handlers {
 
   public handleInput(): void {
   if (this.isDown('DOWN') || this.isDown('s')) {
-    this.game.getGameState().getPlayer().rotate(direction.DOWN);
+    this.game.gameState.player.rotate(direction.DOWN);
   }
 
   if (this.isDown('UP') || this.isDown('w')) {
-    this.game.getGameState().getPlayer().rotate(direction.UP);
+    this.game.gameState.player.rotate(direction.UP);
   }
 
   if (this.isDown('LEFT') || this.isDown('a')) {
-    this.game.getGameState().getPlayer().rotate(direction.LEFT);
+    this.game.gameState.player.rotate(direction.LEFT);
   }
 
   if (this.isDown('RIGHT') || this.isDown('d')) {
-    this.game.getGameState().getPlayer().rotate(direction.RIGHT);
+    this.game.gameState.player.rotate(direction.RIGHT);
   }
 }
 

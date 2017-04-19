@@ -1,35 +1,39 @@
 import { ShapeUnit } from '../../models/unit/shape-unit/shape-unit';
 
 export class GameState {
-  private player: ShapeUnit;
-  private gameTime: number;
-  private staticUnits: Array<ShapeUnit> = [];
+
+  private _player: ShapeUnit;
+  private _gameTime: number;
+  private _staticUnits: Array<ShapeUnit> = [];
 
   constructor() {
     //
   }
 
-  public getPlayer(): ShapeUnit {
-    return this.player;
-  }
-
-  public setPlayer(player: ShapeUnit): void {
-    this.player = player;
-  }
-
   public addStaticUnit(unit: ShapeUnit): void {
-    this.staticUnits.push(unit);
+    this._staticUnits.push(unit);
   }
 
-  public getStaticUnits(): Array<ShapeUnit> {
-    return this.staticUnits;
+  public getAllUnits(): Array<ShapeUnit> {
+    return [this.player].concat(this.staticUnits);
   }
 
-  public getTime(): number {
-    return this.gameTime;
+  get staticUnits(): Array<ShapeUnit> {
+    return this._staticUnits;
   }
 
-  public setTime(time: number): void {
-    this.gameTime = time;
+  get gameTime(): number {
+    return this._gameTime;
+  }
+
+  set gameTime(value: number) {
+    this._gameTime = value;
+  }
+  get player(): ShapeUnit {
+    return this._player;
+  }
+
+  set player(value: ShapeUnit) {
+    this._player = value;
   }
 }

@@ -22,7 +22,7 @@ export class Renderer {
   public render(): void {
     this.contexts.main.drawImage(this.canvases.background, 0, 0);
     this.contexts.main.drawImage(this.canvases.fixed, 0, 0);
-    this.renderEntity(this.game.getGameState().getPlayer(), this.contexts.main);
+    this.renderEntity(this.game.gameState.player, this.contexts.main);
   }
 
 
@@ -38,7 +38,7 @@ export class Renderer {
   }
 
   private renderStaticObjects(): void {
-   this.renderEntities(this.game.getGameState().getStaticUnits(), this.contexts.fixed);
+   this.renderEntities(this.game.gameState.staticUnits, this.contexts.fixed);
   }
 
   private renderEntity(entity: ShapeUnit, context: CanvasRenderingContext2D): void {

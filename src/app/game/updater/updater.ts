@@ -2,24 +2,28 @@ import { Handlers } from '../controller/key-handler';
 import { Game } from '../game';
 import { CollisionChecker } from './collisions/check-collisions';
 import { ShapeUnit } from '../../models/unit/shape-unit/shape-unit';
+import { PositionMap } from '../map/position-map';
 
 
 export class Updater {
   private game: Game;
   private collisionChecker: CollisionChecker;
-  constructor(game: Game) {
+  private positionMap: PositionMap;
+
+  constructor(game: Game, positionMap: PositionMap) {
     this.game = game;
-    this.collisionChecker = new CollisionChecker(game);
+    this.positionMap = positionMap;
+    this.collisionChecker = new CollisionChecker(game, positionMap);
   }
 
   public update(deltaTime: number, handlers: Handlers): void {
-    this.game.getGameState().setTime(this.game.getGameState().getTime() + deltaTime);
+    this.game.gameState.gameTime = this.game.gameState.gameTime + deltaTime;
     handlers.handleInput();
     this.updateEntities(deltaTime);
   }
 
   public updateEntities(deltaTime: number): void {
-    this.updateEntity(deltaTime, this.game.getGameState().getPlayer());
+    this.updateEntity(deltaTime, this.game.gameState.player);
   }
 
   private updateEntity(deltaTime: number, unit: ShapeUnit): void {
@@ -27,6 +31,7 @@ export class Updater {
       unit.stop();
     } else {
       unit.update(deltaTime);
+      this.positionMap.changeUnitPositionMap(unit);
     }
   }
 }

@@ -5,6 +5,7 @@ import { Vector } from '../../models/math-models/vector';
 import { settings } from '../../../settings';
 import { Game } from '../game';
 import { shapeType } from '../../models/unit/shape-unit/shape-unit';
+import { PositionMap } from './position-map';
 
 
 export type appCanvasesType = {
@@ -24,6 +25,7 @@ export class Map {
   private canvases: appCanvasesType;
   private contexts: appContextsType = {main: null, fixed: null, background: null, ground: null};
   private game: Game;
+  private _positionMap: PositionMap;
 
   // constructor() {}
 
@@ -39,12 +41,13 @@ export class Map {
       this.canvases[key].height = settings.canvasHeight;
       this.canvases[key].width = settings.canvasWidth;
     });
+    this._positionMap = new PositionMap({step: 25});
     this.game = game;
     this.addStartUnits();
   }
 
   public addStartUnits(): void {
-    this.game.getGameState().setPlayer(new Tank({
+    this.game.gameState.player = new Tank({
       name: 'Player',
       position: new Vector(200, 200),
       size: new Vector(50, 50),
@@ -54,33 +57,34 @@ export class Map {
       sprite: Resources.getImages().tanks.tank,
       accelerate_module: 20,
       shape: shapeType.RECTANGLE
-    }));
+    });
     for (let i = 0; i < 50; i++) {
-      this.game.getGameState().addStaticUnit(new Wall({
+      this.game.gameState.addStaticUnit(new Wall({
         sprite: Resources.getImages().walls.wall,
         position: new Vector(5 + 10 * i, 5),
         size: new Vector(10, 10),
         shape: shapeType.RECTANGLE
       }));
-      this.game.getGameState().addStaticUnit(new Wall({
+      this.game.gameState.addStaticUnit(new Wall({
         sprite: Resources.getImages().walls.wall,
         position: new Vector(5 + 10 * i, 495),
         size: new Vector(10, 10),
         shape: shapeType.RECTANGLE
       }));
-      this.game.getGameState().addStaticUnit(new Wall({
+      this.game.gameState.addStaticUnit(new Wall({
         sprite: Resources.getImages().walls.wall,
         position: new Vector(5, 5 + 10 * i),
         size: new Vector(10, 10),
         shape: shapeType.RECTANGLE
       }));
-      this.game.getGameState().addStaticUnit(new Wall({
+      this.game.gameState.addStaticUnit(new Wall({
         sprite: Resources.getImages().walls.wall,
         position: new Vector(495, 5 + 10 * i),
         size: new Vector(10, 10),
         shape: shapeType.RECTANGLE
       }));
     }
+    this.game.gameState.getAllUnits().map(unit => this._positionMap.setUnitPositionMap(unit));
   }
 
   public getCanvases(): appCanvasesType {
@@ -89,5 +93,13 @@ export class Map {
 
   public getContexts(): appContextsType {
     return this.contexts;
+  }
+
+  get positionMap(): PositionMap {
+    return this._positionMap;
+  }
+
+  set positionMap(value: PositionMap) {
+    this._positionMap = value;
   }
 }

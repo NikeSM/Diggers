@@ -1,6 +1,5 @@
-import { Unit } from '../../models/unit/unit';
 import { Vector } from '../../models/math-models/vector';
-import { shapeType, ShapeUnit } from '../../models/unit/shape-unit/shape-unit';
+import { ShapeUnit } from '../../models/unit/shape-unit/shape-unit';
 
 export type positionMapOptionsType = {
   step: number;
@@ -38,7 +37,7 @@ export class PositionMap {
   public getCollisionUnits(unit: ShapeUnit, newPosition: Vector): Array<ShapeUnit> {
     let result: Array<ShapeUnit> = [];
     this.getPositionMapSockets(unit, newPosition).map(key => {
-      this.positionMapHash[key].map(saveUnit => {
+      this.positionMapHash[key] && this.positionMapHash[key].map(saveUnit => {
         if (saveUnit !== unit) {
           result.push(saveUnit);
         }
@@ -59,7 +58,7 @@ export class PositionMap {
     let result: Array<string> = [];
     for (let i = s_x; i < e_x; i++) {
       for (let j = s_y; j < e_y; j++) {
-        let key = i + '' + j;
+        let key = i + '_' + j;
         result.push(key);
       }
     }

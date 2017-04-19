@@ -18,8 +18,12 @@ export module utils {
     return result as T;
   }
 
-  export function 	circumscribedCircleRadius(rectSize: Vector): number {
+  export function circumscribedCircleRadius(rectSize: Vector): number {
     return Math.sqrt(rectSize.x * rectSize. x + rectSize.y * rectSize.y);
+  }
+
+  export function segmentLength(p1: Vector, p2: Vector): number {
+    return Math.sqrt(Math.pow(p2.x - p1.x, 2) + Math.pow(p2.y - p1.y, 2));
   }
 }
 

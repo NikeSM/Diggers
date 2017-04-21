@@ -1,24 +1,29 @@
-import { ShapeUnit } from '../../models/unit/shape-unit/shape-unit';
+import { Unit } from '../../models/unit/unit';
 
 export class GameState {
-
-  private _player: ShapeUnit;
+  private _player: Unit;
   private _gameTime: number;
-  private _staticUnits: Array<ShapeUnit> = [];
+  private _staticUnits: Array<Unit> = [];
+  private _dynamicUnit: Array<Unit> = [];
 
   constructor() {
     //
   }
 
-  public addStaticUnit(unit: ShapeUnit): void {
-    this._staticUnits.push(unit);
+  public addStaticUnit(unit: Unit): void {
+    this.staticUnits.push(unit);
   }
 
-  public getAllUnits(): Array<ShapeUnit> {
+
+  public addDynamicUnit(unit: Unit): void {
+    this.dynamicUnit.push(unit);
+  }
+
+  public getAllUnits(): Array<Unit> {
     return [this.player].concat(this.staticUnits);
   }
 
-  get staticUnits(): Array<ShapeUnit> {
+  get staticUnits(): Array<Unit> {
     return this._staticUnits;
   }
 
@@ -29,11 +34,15 @@ export class GameState {
   set gameTime(value: number) {
     this._gameTime = value;
   }
-  get player(): ShapeUnit {
+  get player(): Unit {
     return this._player;
   }
 
-  set player(value: ShapeUnit) {
+  set player(value: Unit) {
     this._player = value;
+  }
+
+  get dynamicUnit(): Array<Unit> {
+    return this._dynamicUnit;
   }
 }

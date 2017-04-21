@@ -1,6 +1,6 @@
 import { Vector } from '../../../models/math-models/vector';
 import { Game } from '../../game';
-import { ShapeUnit } from '../../../models/unit/shape-unit/shape-unit';
+import { shapeType, Unit } from '../../../models/unit/unit';
 import { PositionMap } from '../../map/position-map';
 import { utils } from '../../../../utils';
 
@@ -38,24 +38,43 @@ export class CollisionChecker {
     this.positionMap = positionMap;
   }
 
-  public collisionWithStatic(entity: ShapeUnit, newPosition: Vector): boolean {
+  public collisionWithStatic(entity: Unit, newPosition: Vector): boolean {
     let isCollision = false;
     let units = this.positionMap.getCollisionUnits(entity, newPosition);
     units.map(unit => {
-      if (this.isRectsCollision({
-          rect1: {
-            position: unit.position,
-            size: unit.getRectangleSize()
-          }, rect2: {
-            position: newPosition,
-            size: entity.getRectangleSize()
-          }
-        })) {
+      if (this.unitMoveCollision(entity, newPosition, unit)) {
         entity.stop();
         isCollision = true;
       }
     });
     return isCollision;
+  }
+
+  private unitMoveCollision(movedUnit: Unit, newPosition: Vector, unit: Unit): boolean {
+    if (unit.shape === shapeType.CIRCLE && movedUnit.shape === shapeType.CIRCLE) {
+      return this.isCircleCollision({
+        circle1: {position: unit.position, radius: unit.getCircleSize()},
+        circle2: {position: newPosition, radius: movedUnit.getCircleSize()}
+      });
+    }
+    if (unit.shape === shapeType.RECTANGLE && movedUnit.shape === shapeType.RECTANGLE) {
+      return this.isRectsCollision({
+        rect1: {position: unit.position, size: unit.getRectangleSize()},
+        rect2: {position: newPosition, size: movedUnit.getRectangleSize()}
+      });
+    }
+    if (unit.shape === shapeType.CIRCLE && movedUnit.shape === shapeType.RECTANGLE) {
+      return this.isRectCircleCollision({
+        circle: {position: unit.position, radius: unit.getCircleSize()},
+        rect: {position: newPosition, size: movedUnit.getRectangleSize()}
+      });
+    }
+    if (unit.shape === shapeType.RECTANGLE && movedUnit.shape === shapeType.CIRCLE) {
+      return this.isRectCircleCollision({
+        rect: {position: unit.position, size: unit.getRectangleSize()},
+        circle: {position: newPosition, radius: movedUnit.getCircleSize()}
+      });
+    }
   }
 
   private isRectsCollision(args: isRectsCollisionArgsType): boolean {

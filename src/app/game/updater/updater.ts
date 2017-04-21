@@ -1,7 +1,7 @@
 import { Handlers } from '../controller/key-handler';
 import { Game } from '../game';
 import { CollisionChecker } from './collisions/check-collisions';
-import { ShapeUnit } from '../../models/unit/shape-unit/shape-unit';
+import { Unit } from '../../models/unit/unit';
 import { PositionMap } from '../map/position-map';
 
 
@@ -26,7 +26,7 @@ export class Updater {
     this.updateEntity(deltaTime, this.game.gameState.player);
   }
 
-  private updateEntity(deltaTime: number, unit: ShapeUnit): void {
+  private updateEntity(deltaTime: number, unit: Unit): void {
     if (this.collisionChecker.collisionWithStatic(unit, unit.getNewPosition(deltaTime))) {
       unit.stop();
     } else {

@@ -1,12 +1,12 @@
 import { Resources } from '../../../resources/index';
-import { Tank } from '../../models/unit/shape-unit/tanks/tank';
-import { Wall } from '../../models/unit/shape-unit/walls/wall';
+import { Tank } from '../../models/unit/tanks/tank';
+import { defaultWallOptions, Wall } from '../../models/unit/walls/wall';
 import { Vector } from '../../models/math-models/vector';
 import { settings } from '../../../settings';
 import { Game } from '../game';
-import { shapeType } from '../../models/unit/shape-unit/shape-unit';
+import { shapeType } from '../../models/unit/unit';
 import { PositionMap } from './position-map';
-
+import { defaultBulletOptions } from '../../models/unit/bullet/bullet';
 
 export type appCanvasesType = {
   main: HTMLCanvasElement,
@@ -48,41 +48,25 @@ export class Map {
 
   public addStartUnits(): void {
     this.game.gameState.player = new Tank({
-      name: 'Player',
-      position: new Vector(200, 200),
-      size: new Vector(50, 50),
-      max_speed: 200,
-      min_speed: 5,
-      shotTimeout: 5,
-      sprite: Resources.getImages().tanks.tank,
-      accelerate_module: 20,
-      shape: shapeType.RECTANGLE
+      unitOptions: {
+        name: 'Player',
+        position: new Vector(200, 200),
+        size: new Vector(50, 50),
+        max_speed: 200,
+        min_speed: 5,
+        sprite: Resources.getImages().tanks.tank,
+        accelerate_module: 20,
+        shape: shapeType.RECTANGLE,
+        game: this.game,
+        radius: 25
+      },
+      bulletOptions: defaultBulletOptions
     });
     for (let i = 0; i < 50; i++) {
-      this.game.gameState.addStaticUnit(new Wall({
-        sprite: Resources.getImages().walls.wall,
-        position: new Vector(5 + 10 * i, 5),
-        size: new Vector(10, 10),
-        shape: shapeType.RECTANGLE
-      }));
-      this.game.gameState.addStaticUnit(new Wall({
-        sprite: Resources.getImages().walls.wall,
-        position: new Vector(5 + 10 * i, 495),
-        size: new Vector(10, 10),
-        shape: shapeType.RECTANGLE
-      }));
-      this.game.gameState.addStaticUnit(new Wall({
-        sprite: Resources.getImages().walls.wall,
-        position: new Vector(5, 5 + 10 * i),
-        size: new Vector(10, 10),
-        shape: shapeType.RECTANGLE
-      }));
-      this.game.gameState.addStaticUnit(new Wall({
-        sprite: Resources.getImages().walls.wall,
-        position: new Vector(495, 5 + 10 * i),
-        size: new Vector(10, 10),
-        shape: shapeType.RECTANGLE
-      }));
+      this.game.gameState.addStaticUnit(new Wall(defaultWallOptions));
+      this.game.gameState.addStaticUnit(new Wall(defaultWallOptions));
+      this.game.gameState.addStaticUnit(new Wall(defaultWallOptions));
+      this.game.gameState.addStaticUnit(new Wall(defaultWallOptions));
     }
     this.game.gameState.getAllUnits().map(unit => this._positionMap.setUnitPositionMap(unit));
   }

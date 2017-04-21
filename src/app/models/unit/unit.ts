@@ -2,22 +2,39 @@ import { utils } from '../../../utils';
 import { Vector } from '../math-models/vector';
 import { Sprite } from '../animation/sprite';
 import { direction } from '../math-models/direction';
+import { Game } from '../../game/game';
+import { Map } from '../../game/map/map';
+import { GameState } from '../../game/game-state/game-state';
+
+export enum shapeType {
+  CIRCLE,
+  RECTANGLE
+}
 
 export type unitOptions = {
+  game: Game;
   sprite: Sprite;
-  name?: string;
-  position?: Vector;
-  max_speed?: number
-  min_speed?: number
-  accelerate_module?: number;
+  shape: shapeType;
+  name: string;
+  position: Vector;
+  max_speed: number
+  min_speed: number
+  accelerate_module: number;
+  radius: number;
+  size: Vector;
 }
-let defaultUnitOptions: unitOptions = {
+
+export let defaultUnitOptions: unitOptions = {
+  game: null,
   sprite: null,
   name: '',
   position: new Vector(0, 0),
   accelerate_module: 0,
   max_speed: 0,
-  min_speed: 0
+  min_speed: 0,
+  shape: shapeType.RECTANGLE,
+  size: new Vector(50, 50),
+  radius: 50
 };
 export class Unit {
   private _id: string;
@@ -30,6 +47,12 @@ export class Unit {
   private _min_speed: number;
   private _direction: Vector;
   private _accelerate_module: number;
+  private _radius: number;
+  private _size: Vector;
+  private _shape: shapeType;
+  private _game: Game;
+  private _map: Map;
+  private _gameState: GameState;
 
   constructor(options: unitOptions) {
     let mergedOptions = utils.merge([defaultUnitOptions, options]);
@@ -40,7 +63,13 @@ export class Unit {
     this.accelerate_module = mergedOptions.accelerate_module;
     this.max_speed = mergedOptions.max_speed;
     this.min_speed = mergedOptions.min_speed;
+    this.radius = mergedOptions.radius;
+    this.size = mergedOptions.size;
+    this.shape = mergedOptions.shape;
+    this._game = mergedOptions.game;
 
+    this._map = this._game.map;
+    this._gameState = this._game.gameState;
     this.accelerate = new Vector(0, 0);
     this.direction = direction.RIGHT;
     this.speed = this.direction;
@@ -105,7 +134,52 @@ export class Unit {
   }
 
   public render(context: CanvasRenderingContext2D): void {
-    console.error('Must overrides in children');
+    this.sprite.render(context, this.getDrawPoint(), this.getRectangleSize());
+  }
+
+  public getDrawPoint(): Vector {
+    switch (this.shape) {
+      case shapeType.CIRCLE:
+        return new Vector(-this.radius, -this.radius);
+      case shapeType.RECTANGLE:
+        return new Vector(-this.size.x / 2, -this.size.y / 2);
+      default:
+        return new Vector(0, 0);
+    }
+  }
+
+  public getRectangleSize(): Vector {
+    switch (this.shape) {
+      case shapeType.CIRCLE:
+        return new Vector(this.radius * 2, this.radius * 2);
+      case shapeType.RECTANGLE:
+        return this.size;
+      default:
+        return new Vector(0, 0);
+    }
+  }
+
+  public getCircleSize(): number {
+    switch (this.shape) {
+      case shapeType.CIRCLE:
+        return this.radius;
+      case shapeType.RECTANGLE:
+        return utils.circumscribedCircleRadius(this.size);
+      default:
+        return 0;
+    }
+  }
+
+
+  private get radius(): number {
+    switch (this.shape) {
+      case shapeType.CIRCLE:
+        return this.radius;
+      case shapeType.RECTANGLE:
+        return utils.circumscribedCircleRadius(this.size);
+      default:
+        return 0;
+    }
   }
 
   get accelerate_module(): number {
@@ -120,6 +194,9 @@ export class Unit {
   }
 
   set direction(value: Vector) {
+    if (this.direction && value.dot(this.direction) === 0) {
+      this.size = new Vector(this.size.y, this.size.x);
+    }
     this._direction = value;
   }
   get sprite(): Sprite {
@@ -177,5 +254,37 @@ export class Unit {
 
   set id(value: string) {
     this._id = value;
+  }
+
+  private set radius(value: number) {
+    this._radius = value;
+  }
+
+  private get size(): Vector {
+    return this._size;
+  }
+
+  private set size(value: Vector) {
+    this._size = value;
+  }
+
+  get shape(): shapeType {
+    return this._shape;
+  }
+
+  set shape(value: shapeType) {
+    this._shape = value;
+  }
+
+  get map(): Map {
+    return this._map;
+  }
+
+  get game(): Game {
+    return this._game;
+  }
+
+  get gameState(): GameState {
+    return this._gameState;
   }
 }

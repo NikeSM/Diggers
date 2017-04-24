@@ -18,7 +18,7 @@ export class Updater {
 
   public update(deltaTime: number, handlers: Handlers): void {
     this.game.gameState.gameTime = this.game.gameState.gameTime + deltaTime;
-    handlers.handleInput();
+    handlers.handleInput(deltaTime);
     this.updateEntities(deltaTime);
   }
 

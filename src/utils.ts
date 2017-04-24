@@ -5,21 +5,21 @@ export module utils {
     return '_' + Math.random().toString(36).substr(2, 9);
   }
 
-  export function merge<T>(objects: Array<T>): T {
-    let result = {};
-    objects.map(object => {
-      Object.keys(object).map(key => {
-        if (object[key] !== null && object[key] !== 'undefined') {
-          if (typeof object[key] !== 'object' || !result[key]) {
-            result[key] = object[key];
-          } else {
-            result[key] = merge([result[key], object[key]]);
-          }
-        }
-      });
-    });
-    return result as T;
-  }
+  // export function merge<T>(objects: Array<T>): T {
+  //   let result = {};
+  //   objects.map(object => {
+  //     Object.keys(object).map(key => {
+  //       if (object[key] !== null && object[key] !== 'undefined') {
+  //         if (typeof object[key] !== 'object' || !result[key]) {
+  //           result[key] = object[key];
+  //         } else {
+  //           result[key] = merge([result[key], object[key]]);
+  //         }
+  //       }
+  //     });
+  //   });
+  //   return result as T;
+  // }
 
   export function circumscribedCircleRadius(rectSize: Vector): number {
     return Math.sqrt(rectSize.x * rectSize.x + rectSize.y * rectSize.y);

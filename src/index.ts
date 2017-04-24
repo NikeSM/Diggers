@@ -1,8 +1,5 @@
 import { Resources } from './resources';
 import { Game } from './app/game/game';
-import { utils } from './utils';
-import merge = utils.merge;
-
 
 window.onload = () => {
   Resources.load();

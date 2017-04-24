@@ -16,7 +16,7 @@ export class Handlers {
     return this.pressedKeys[key.toUpperCase()];
   }
 
-  public handleInput(): void {
+  public handleInput(deltaTime: number): void {
   if (this.isDown('DOWN') || this.isDown('s')) {
     this.game.gameState.player.rotate(direction.DOWN);
   }
@@ -31,6 +31,10 @@ export class Handlers {
 
   if (this.isDown('RIGHT') || this.isDown('d')) {
     this.game.gameState.player.rotate(direction.RIGHT);
+  }
+
+  if (this.isDown('SPACE')) {
+    this.game.gameState.player.shoot(deltaTime);
   }
 }
 

@@ -22,7 +22,7 @@ export class Renderer {
   public render(): void {
     this.contexts.main.drawImage(this.canvases.background, 0, 0);
     this.contexts.main.drawImage(this.canvases.fixed, 0, 0);
-    this.renderEntity(this.game.gameState.player, this.contexts.main);
+    this.renderEntities([this.game.gameState.player as Unit].concat(this.game.gameState.dynamicUnits), this.contexts.main);
   }
 
 

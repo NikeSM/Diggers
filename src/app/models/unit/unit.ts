@@ -14,14 +14,14 @@ export enum shapeType {
 export type unitOptions = {
   game: Game;
   sprite: Sprite;
-  shape: shapeType;
-  name: string;
-  position: Vector;
-  max_speed: number
-  min_speed: number
-  accelerate_module: number;
-  radius: number;
-  size: Vector;
+  shape?: shapeType;
+  name?: string;
+  position?: Vector;
+  max_speed?: number
+  min_speed?: number
+  accelerate_module?: number;
+  radius?: number;
+  size?: Vector;
 }
 
 export let defaultUnitOptions: unitOptions = {
@@ -34,7 +34,7 @@ export let defaultUnitOptions: unitOptions = {
   min_speed: 0,
   shape: shapeType.RECTANGLE,
   size: new Vector(50, 50),
-  radius: 50
+  radius: 25
 };
 export class Unit {
   private _id: string;
@@ -55,7 +55,7 @@ export class Unit {
   private _gameState: GameState;
 
   constructor(options: unitOptions) {
-    let mergedOptions = utils.merge([defaultUnitOptions, options]);
+    let mergedOptions = Unit.mergeUnitOptions(defaultUnitOptions, options);
     this.id = utils.generateId();
     this.name = mergedOptions.name;
     this.sprite = mergedOptions.sprite;
@@ -170,6 +170,20 @@ export class Unit {
     }
   }
 
+  public static mergeUnitOptions(opt_1: unitOptions, opt_2: unitOptions): unitOptions {
+    let position = opt_2.position || opt_1.position || new Vector(0, 0);
+    let size = opt_2.size || opt_1.size || new Vector(50, 50);
+    return {
+      game:  opt_2.game || opt_1.game || null,
+      sprite: opt_2.sprite || opt_1.sprite || null,
+      position: position.clone(),
+      accelerate_module: opt_2.accelerate_module || opt_1.accelerate_module || 0,
+      max_speed: opt_2.max_speed || opt_1.min_speed || 0,
+      shape: opt_2.shape || opt_1.shape || shapeType.RECTANGLE,
+      size: size.clone(),
+      radius: opt_2.radius || opt_1.radius || 25
+    };
+  }
 
   private get radius(): number {
     switch (this.shape) {
@@ -194,7 +208,7 @@ export class Unit {
   }
 
   set direction(value: Vector) {
-    if (this.direction && value.dot(this.direction) === 0) {
+    if (this.direction && - value.dot(this.direction) === 0) {
       this.size = new Vector(this.size.y, this.size.x);
     }
     this._direction = value;

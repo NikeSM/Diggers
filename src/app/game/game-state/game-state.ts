@@ -1,7 +1,8 @@
 import { Unit } from '../../models/unit/unit';
+import { Tank } from '../../models/unit/tanks/tank';
 
 export class GameState {
-  private _player: Unit;
+  private _player: Tank;
   private _gameTime: number;
   private _staticUnits: Array<Unit> = [];
   private _dynamicUnit: Array<Unit> = [];
@@ -16,11 +17,11 @@ export class GameState {
 
 
   public addDynamicUnit(unit: Unit): void {
-    this.dynamicUnit.push(unit);
+    this.dynamicUnits.push(unit);
   }
 
   public getAllUnits(): Array<Unit> {
-    return [this.player].concat(this.staticUnits);
+    return [this.player as Unit].concat(this.staticUnits);
   }
 
   get staticUnits(): Array<Unit> {
@@ -34,15 +35,15 @@ export class GameState {
   set gameTime(value: number) {
     this._gameTime = value;
   }
-  get player(): Unit {
+  get player(): Tank {
     return this._player;
   }
 
-  set player(value: Unit) {
+  set player(value: Tank) {
     this._player = value;
   }
 
-  get dynamicUnit(): Array<Unit> {
+  get dynamicUnits(): Array<Unit> {
     return this._dynamicUnit;
   }
 }

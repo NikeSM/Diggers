@@ -1,6 +1,6 @@
 import { Resources } from '../../../resources/index';
 import { Tank } from '../../models/unit/tanks/tank';
-import { defaultWallOptions, Wall } from '../../models/unit/walls/wall';
+import { Wall } from '../../models/unit/walls/wall';
 import { Vector } from '../../models/math-models/vector';
 import { settings } from '../../../settings';
 import { Game } from '../game';
@@ -63,10 +63,20 @@ export class Map {
       bulletOptions: defaultBulletOptions
     });
     for (let i = 0; i < 50; i++) {
-      this.game.gameState.addStaticUnit(new Wall(defaultWallOptions));
-      this.game.gameState.addStaticUnit(new Wall(defaultWallOptions));
-      this.game.gameState.addStaticUnit(new Wall(defaultWallOptions));
-      this.game.gameState.addStaticUnit(new Wall(defaultWallOptions));
+      let wallOptions = {
+        unitOptions: {
+          game: this.game,
+          sprite: Resources.getImages().walls.wall,
+          position: new Vector(5, i * 10 + 5)
+        }
+      };
+      this.game.gameState.addStaticUnit(new Wall(wallOptions));
+      wallOptions.unitOptions.position = new Vector(495, i * 10 + 5);
+      this.game.gameState.addStaticUnit(new Wall(wallOptions));
+      wallOptions.unitOptions.position = new Vector(i * 10 + 5, 5);
+      this.game.gameState.addStaticUnit(new Wall(wallOptions));
+      wallOptions.unitOptions.position = new Vector(i * 10 + 5, 495);
+      this.game.gameState.addStaticUnit(new Wall(wallOptions));
     }
     this.game.gameState.getAllUnits().map(unit => this._positionMap.setUnitPositionMap(unit));
   }

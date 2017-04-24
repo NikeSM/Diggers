@@ -57,13 +57,19 @@ export class Sprite {
     this.timePass += deltaTime;
   }
 
-  public getSize (): {x: number, y: number} { return this.size; }
-  public isDone (): boolean { return this.done; }
+  public getSize(): { x: number, y: number } {
+    return this.size;
+  }
+
+  public isDone(): boolean {
+    return this.done;
+  }
+
   private draw(context: CanvasRenderingContext2D, drawPoint: Vector, drawSize: Vector): void {
-      context.drawImage(
+    context.drawImage(
       Resources.get(this.url),
       this.spritePosition.x + this.frame * this.size.x, this.spritePosition.y + this.frame * this.size.y,
-        // Позиция на спрайте
+      // Позиция на спрайте
       this.size.x, this.size.y, // размер на спрайте
       drawPoint.x, drawPoint.y, // координаты левого верхнего угла на канвасе
       drawSize.x, drawSize.y); // размер на канвасу

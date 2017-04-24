@@ -49,7 +49,6 @@ export class PositionMap {
   private getPositionMapSockets(unit: Unit,
                                 position: Vector = unit.position,
                                 size: Vector = unit.getRectangleSize()): Array<string> {
-    unit.position.equals(new Vector(5, 5)) && console.log(unit);
     let maxSideHalf = Math.max(size.x, size.y) / 2;
     let s_x = Math.floor((position.x - maxSideHalf) / this.step);
     let s_y = Math.floor((position.y - maxSideHalf) / this.step);

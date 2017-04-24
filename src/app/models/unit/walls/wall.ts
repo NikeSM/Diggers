@@ -22,6 +22,13 @@ export let defaultWallOptions: wallOptions = {
 
 export class Wall extends Unit {
   constructor(options: wallOptions) {
-    super(options.unitOptions);
+    let mergedOptions = Wall.mergeWallOptions(defaultWallOptions, options);
+    super(mergedOptions.unitOptions);
+  }
+
+  public static mergeWallOptions(opt_1: wallOptions, opt_2: wallOptions): wallOptions {
+    return {
+      unitOptions: Unit.mergeUnitOptions(opt_1.unitOptions, opt_2.unitOptions)
+    };
   }
 }

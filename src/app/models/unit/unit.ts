@@ -56,23 +56,23 @@ export class Unit {
 
   constructor(options: unitOptions) {
     let mergedOptions = Unit.mergeUnitOptions(defaultUnitOptions, options);
-    this.id = utils.generateId();
-    this.name = mergedOptions.name;
-    this.sprite = mergedOptions.sprite;
-    this.position = mergedOptions.position;
-    this.accelerate_module = mergedOptions.accelerate_module;
-    this.max_speed = mergedOptions.max_speed;
-    this.min_speed = mergedOptions.min_speed;
-    this.radius = mergedOptions.radius;
-    this.size = mergedOptions.size;
-    this.shape = mergedOptions.shape;
+    this._id = utils.generateId();
+    this._name = mergedOptions.name;
+    this._sprite = mergedOptions.sprite;
+    this._position = mergedOptions.position;
+    this._accelerate_module = mergedOptions.accelerate_module;
+    this._max_speed = mergedOptions.max_speed;
+    this._min_speed = mergedOptions.min_speed;
+    this._radius = mergedOptions.radius;
+    this._size = mergedOptions.size;
+    this._shape = mergedOptions.shape;
     this._game = mergedOptions.game;
 
     this._map = this._game.map;
     this._gameState = this._game.gameState;
-    this.accelerate = new Vector(0, 0);
-    this.direction = direction.RIGHT;
-    this.speed = this.direction;
+    this._accelerate = new Vector(0, 0);
+    this._direction = direction.RIGHT;
+    this._speed = this.direction;
   }
   // public deleteUnit (callback: Function): void {
   //   callback();
@@ -82,7 +82,6 @@ export class Unit {
   public update(deltaTime: number): void {
     this.position = this.getNewPosition(deltaTime);
     this.speed = this.speed.add(this.accelerate.multiply(deltaTime));
-    this.speed = this.speed.length() < this.max_speed ? this.speed : this.speed.setLength(this.max_speed);
     this._sprite.update(deltaTime);
   }
 
@@ -175,10 +174,12 @@ export class Unit {
     let size = opt_2.size || opt_1.size || new Vector(50, 50);
     return {
       game:  opt_2.game || opt_1.game || null,
+      name: opt_2.name || opt_1.name || 'Unit',
       sprite: opt_2.sprite || opt_1.sprite || null,
       position: position.clone(),
       accelerate_module: opt_2.accelerate_module || opt_1.accelerate_module || 0,
       max_speed: opt_2.max_speed || opt_1.min_speed || 0,
+      min_speed: opt_2.min_speed || opt_1.min_speed || 0,
       shape: opt_2.shape || opt_1.shape || shapeType.RECTANGLE,
       size: size.clone(),
       radius: opt_2.radius || opt_1.radius || 25
@@ -246,7 +247,9 @@ export class Unit {
   }
 
   set speed(value: Vector) {
-    this._speed = value;
+    let speed = value.length() < this.max_speed ? value : value.setLength(this.max_speed);
+    speed = value.length() > this.min_speed ? value : value.setLength(this.min_speed);
+    this._speed = speed;
   }
   get position(): Vector {
     return this._position;

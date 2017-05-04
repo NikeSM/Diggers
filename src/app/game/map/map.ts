@@ -58,7 +58,9 @@ export class Map {
         accelerate_module: 20,
         shape: shapeType.RECTANGLE,
         game: this.game,
-        radius: 25
+        radius: 25,
+        health: 100,
+        immortal: false
       },
       bulletOptions: defaultBulletOptions
     });

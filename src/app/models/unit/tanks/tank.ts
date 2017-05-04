@@ -1,6 +1,8 @@
 import { Vector } from '../../math-models/vector';
 import { shapeType, Unit, unitOptions } from '../unit';
 import { Bullet, bulletOptions, defaultBulletOptions } from '../bullet/bullet';
+import { Resources } from '../../../../resources/index';
+import { direction } from '../../math-models/direction';
 
 export type tankOptions = {
   unitOptions: unitOptions,
@@ -12,13 +14,16 @@ export let defaultTankOptions: tankOptions = {
   unitOptions: {
     name: 'Player',
     position: new Vector(200, 200),
+    direction: direction.RIGHT,
     size: new Vector(50, 50),
     max_speed: 200,
     min_speed: 5,
     sprite: null,
     accelerate_module: 20,
     shape: shapeType.RECTANGLE,
-    game: null
+    game: null,
+    immortal: false,
+    health: 100
   },
   bulletOptions: defaultBulletOptions,
   shootCoolDown: 1000
@@ -33,8 +38,8 @@ export class Tank extends Unit {
     let mergedOptions = Tank.mergeTankOptions(defaultTankOptions, options);
     this.bulletOptions = mergedOptions.bulletOptions;
     this.shootCoolDown = mergedOptions.shootCoolDown;
-
     this.shootCoolDownTimeout = 0;
+    this.shoot = this.shoot.bind(this);
   }
 
   public shoot(deltaTime: number): void {
@@ -58,10 +63,15 @@ export class Tank extends Unit {
   }
 
   private createBullet(): Bullet {
-    this.bulletOptions.unitOptions.game = this.game;
-    this.bulletOptions.unitOptions.sprite = this.sprite;
-    this.bulletOptions.unitOptions.position =
-      new Vector(this.position.x + this.getRectangleSize().x + 5, this.position.y);
-    return new Bullet(this.bulletOptions);
+    let bulletOptions = Bullet.mergeBulletOptions(this.bulletOptions, {
+      unitOptions: {
+        game: this.game,
+        sprite: Resources.getImages().bullets.bullet,
+        direction: this.direction,
+        position:  new Vector(this.position.x, this.position.y)
+          .add(this.direction.setLength(this.getRectangleSize().x / 2 + this.bulletOptions.unitOptions.size.x / 2 + 5))
+      }
+    });
+    return new Bullet(bulletOptions);
   }
 }

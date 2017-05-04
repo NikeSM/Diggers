@@ -3,6 +3,7 @@ import { Game } from '../../game';
 import { shapeType, Unit } from '../../../models/unit/unit';
 import { PositionMap } from '../../map/position-map';
 import { utils } from '../../../../utils';
+import { StopCollision } from './collision-classes/stop-collision';
 
 type rectType = {
   position: Vector,
@@ -43,7 +44,7 @@ export class CollisionChecker {
     let units = this.positionMap.getCollisionUnits(entity, newPosition);
     units.map(unit => {
       if (this.unitMoveCollision(entity, newPosition, unit)) {
-        entity.stop();
+        !isCollision && new StopCollision(unit, entity);
         isCollision = true;
       }
     });

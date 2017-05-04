@@ -24,6 +24,9 @@ export class Updater {
 
   public updateEntities(deltaTime: number): void {
     this.updateEntity(deltaTime, this.game.gameState.player);
+    this.game.gameState.dynamicUnits.map(unit =>
+      this.updateEntity(deltaTime, unit)
+    );
   }
 
   private updateEntity(deltaTime: number, unit: Unit): void {

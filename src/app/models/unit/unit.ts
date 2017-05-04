@@ -17,11 +17,14 @@ export type unitOptions = {
   shape?: shapeType;
   name?: string;
   position?: Vector;
+  direction?: Vector;
   max_speed?: number
   min_speed?: number
   accelerate_module?: number;
   radius?: number;
   size?: Vector;
+  immortal?: boolean;
+  health?: number
 }
 
 export let defaultUnitOptions: unitOptions = {
@@ -29,12 +32,15 @@ export let defaultUnitOptions: unitOptions = {
   sprite: null,
   name: '',
   position: new Vector(0, 0),
+  direction: direction.RIGHT,
   accelerate_module: 0,
   max_speed: 0,
   min_speed: 0,
   shape: shapeType.RECTANGLE,
   size: new Vector(50, 50),
-  radius: 25
+  radius: 25,
+  immortal: false,
+  health: 100
 };
 export class Unit {
   private _id: string;
@@ -67,17 +73,14 @@ export class Unit {
     this._size = mergedOptions.size;
     this._shape = mergedOptions.shape;
     this._game = mergedOptions.game;
+    this._direction = mergedOptions.direction;
 
     this._map = this._game.map;
     this._gameState = this._game.gameState;
     this._accelerate = new Vector(0, 0);
-    this._direction = direction.RIGHT;
     this._speed = this.direction;
   }
-  // public deleteUnit (callback: Function): void {
-  //   callback();
-  //   delete this;
-  // }
+
 
   public update(deltaTime: number): void {
     this.position = this.getNewPosition(deltaTime);
@@ -87,6 +90,11 @@ export class Unit {
 
   public getNewPosition(deltaTime: number): Vector {
     return this.position.add(this.speed.multiply(deltaTime));
+  }
+
+  public deleteUnit (): void {
+    this.gameState.deleteUnit(this);
+    this.game.map.positionMap.deleteUnitPositionMap(this);
   }
 
   public rotate(direction: Vector): void {
@@ -176,13 +184,16 @@ export class Unit {
       game:  opt_2.game || opt_1.game || null,
       name: opt_2.name || opt_1.name || 'Unit',
       sprite: opt_2.sprite || opt_1.sprite || null,
+      direction: opt_2.direction || opt_1.direction || direction.RIGHT,
       position: position.clone(),
       accelerate_module: opt_2.accelerate_module || opt_1.accelerate_module || 0,
       max_speed: opt_2.max_speed || opt_1.min_speed || 0,
       min_speed: opt_2.min_speed || opt_1.min_speed || 0,
       shape: opt_2.shape || opt_1.shape || shapeType.RECTANGLE,
       size: size.clone(),
-      radius: opt_2.radius || opt_1.radius || 25
+      radius: opt_2.radius || opt_1.radius || 25,
+      immortal: opt_2.immortal || opt_1.immortal || false,
+      health: opt_2.health || opt_1.health || 100
     };
   }
 
@@ -249,6 +260,7 @@ export class Unit {
   set speed(value: Vector) {
     let speed = value.length() < this.max_speed ? value : value.setLength(this.max_speed);
     speed = value.length() > this.min_speed ? value : value.setLength(this.min_speed);
+    // speed = value.length() === 0 ? this.direction.setLength(this.min_speed) : value;
     this._speed = speed;
   }
   get position(): Vector {

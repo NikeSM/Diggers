@@ -9,11 +9,12 @@ export class Renderer {
   private canvases: appCanvasesType;
   private game: Game;
 
- constructor(contexts: appContextsType, canvases: appCanvasesType, game: Game) {
-   this.contexts = contexts;
-   this.canvases = canvases;
-   this.game = game;
- }
+  constructor(contexts: appContextsType, canvases: appCanvasesType, game: Game) {
+    this.contexts = contexts;
+    this.canvases = canvases;
+    this.game = game;
+  }
+
   public preRender(): void {
     this.renderBackground();
     this.renderStaticObjects();
@@ -22,7 +23,10 @@ export class Renderer {
   public render(): void {
     this.contexts.main.drawImage(this.canvases.background, 0, 0);
     this.contexts.main.drawImage(this.canvases.fixed, 0, 0);
-    this.renderEntities([this.game.gameState.player as Unit].concat(this.game.gameState.dynamicUnits), this.contexts.main);
+    this.renderEntities(
+      [this.game.gameState.player as Unit].concat(this.game.gameState.dynamicUnits),
+      this.contexts.main
+    );
   }
 
 
@@ -38,7 +42,7 @@ export class Renderer {
   }
 
   private renderStaticObjects(): void {
-   this.renderEntities(this.game.gameState.staticUnits, this.contexts.fixed);
+    this.renderEntities(this.game.gameState.staticUnits, this.contexts.fixed);
   }
 
   private renderEntity(entity: Unit, context: CanvasRenderingContext2D): void {

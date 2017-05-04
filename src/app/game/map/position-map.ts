@@ -57,7 +57,6 @@ export class PositionMap {
     let result: Array<string> = [];
     for (let i = s_x; i <= e_x; i++) {
       for (let j = s_y; j <= e_y; j++) {
-        s_x === 0 && console.log(s_x);
         let key = i + '_' + j;
         result.push(key);
       }

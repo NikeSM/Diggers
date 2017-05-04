@@ -1,9 +1,10 @@
 import { Vector } from '../../math-models/vector';
 import { shapeType, Unit, unitOptions } from '../unit';
+import { direction } from '../../math-models/direction';
 
 export type bulletOptions = {
   unitOptions: unitOptions;
-  damage: number;
+  damage?: number;
 }
 
 export let defaultBulletOptions = {
@@ -12,12 +13,15 @@ export let defaultBulletOptions = {
     sprite: null,
     name: 'bullet',
     position: new Vector(0, 0),
+    direction: direction.RIGHT,
     size: new Vector(5, 5),
     radius: 2.5,
-    max_speed: 50,
-    min_speed: 50,
+    max_speed: 200,
+    min_speed: 200,
     accelerate_module: 5,
-    shape: shapeType.RECTANGLE
+    shape: shapeType.RECTANGLE,
+    immortal: false,
+    health: 100
   },
   damage: 0
 };

@@ -24,6 +24,11 @@ export class GameState {
     return [this.player as Unit].concat(this.staticUnits);
   }
 
+  public deleteUnit(unit: Unit): void {
+    this._dynamicUnit = this.dynamicUnits.filter(savedUnit => unit !== savedUnit);
+    this.player = this.player === unit ? null : this.player;
+  }
+
   get staticUnits(): Array<Unit> {
     return this._staticUnits;
   }

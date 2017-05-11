@@ -6,27 +6,27 @@ export type positionMapOptionsType = {
 }
 
 export class PositionMap {
-  private _positionMapHash: { [key: string]: Array<Unit> } = {};
-  private _unitPositionMapHash: { [key: string]: Array<string> } = {};
-  private _step: number;
+  private positionMapHash: { [key: string]: Array<Unit> } = {};
+  private unitPositionMapHash: { [key: string]: Array<string> } = {};
+  private step: number;
 
   constructor(options: positionMapOptionsType) {
     this.step = options.step;
   }
 
   public setUnitPositionMap(unit: Unit): void {
-    this.unitPositionMapHash[unit.id] = this.getPositionMapSockets(unit);
-    this.setPositionMapSockets(this.unitPositionMapHash[unit.id], unit);
+    this.unitPositionMapHash[unit.getId()] = this.getPositionMapSockets(unit);
+    this.setPositionMapSockets(this.unitPositionMapHash[unit.getId()], unit);
   }
 
   public deleteUnitPositionMap(unit: Unit): void {
-    let positionMap = this.unitPositionMapHash[unit.id];
+    let positionMap = this.unitPositionMapHash[unit.getId()];
     if (positionMap) {
       positionMap.map(key => {
         this.positionMapHash[key] = this.positionMapHash[key].filter(saveUnit => saveUnit !== unit);
       });
     }
-    delete this.unitPositionMapHash[unit.id];
+    delete this.unitPositionMapHash[unit.getId()];
   }
 
   public changeUnitPositionMap(unit: Unit): void {
@@ -47,7 +47,7 @@ export class PositionMap {
   }
 
   private getPositionMapSockets(unit: Unit,
-                                position: Vector = unit.position,
+                                position: Vector = unit.getPosition(),
                                 size: Vector = unit.getRectangleSize()): Array<string> {
     let maxSideHalf = Math.max(size.x, size.y) / 2;
     let s_x = Math.floor((position.x - maxSideHalf) / this.step);
@@ -67,29 +67,5 @@ export class PositionMap {
   private setPositionMapSockets(sockets: Array<string>, unit: Unit): void {
     sockets.map(key =>
       this.positionMapHash[key] ? this.positionMapHash[key].push(unit) : this.positionMapHash[key] = [unit]);
-  }
-
-  get positionMapHash(): { [p: string]: Array<Unit> } {
-    return this._positionMapHash;
-  }
-
-  set positionMapHash(value: { [p: string]: Array<Unit> }) {
-    this._positionMapHash = value;
-  }
-
-  get unitPositionMapHash(): { [p: string]: Array<string> } {
-    return this._unitPositionMapHash;
-  }
-
-  set unitPositionMapHash(value: { [p: string]: Array<string> }) {
-    this._unitPositionMapHash = value;
-  }
-
-  private get step(): number {
-    return this._step;
-  }
-
-  private set step(value: number) {
-    this._step = value;
   }
 }

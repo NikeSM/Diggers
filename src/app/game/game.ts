@@ -10,14 +10,14 @@ export class Game {
   private lastTime: number;
   private handlers: Handlers;
   private renderer: Renderer;
-  private _gameState: GameState;
+  private gameState: GameState;
   private updater: Updater;
-  private _map: Map;
+  private map: Map;
 
   constructor() {
     this.start = this.start.bind(this);
     this.frame = this.frame.bind(this);
-    this._gameState = new GameState();
+    this.gameState = new GameState();
     this.handlers = new Handlers(this);
     this.contexts = {main: null, fixed: null, background: null, ground: null};
   }
@@ -26,7 +26,7 @@ export class Game {
     let map = new Map();
     this.map = map;
     map.create(this);
-    this.updater = new Updater(this, map.positionMap);
+    this.updater = new Updater(this, map.getPositionMap());
     this.canvases = map.getCanvases();
     this.contexts = map.getContexts();
     this.renderer = new Renderer(this.contexts, this.canvases, this);
@@ -35,6 +35,14 @@ export class Game {
     this.renderer.preRender();
     this.frame();
   };
+
+  public getGameState(): GameState {
+    return this.gameState;
+  }
+
+  public getMap(): Map {
+    return this.map;
+  }
 
   private frame(): void {
     let now: number = Date.now();
@@ -45,21 +53,5 @@ export class Game {
 
     this.lastTime = now;
     window.requestAnimationFrame(this.frame);
-  }
-
-  get map(): Map {
-    return this._map;
-  }
-
-  set map(value: Map) {
-    this._map = value;
-  }
-
-  get gameState(): GameState {
-    return this._gameState;
-  }
-
-  set gameState(value: GameState) {
-    this._gameState = value;
   }
 }

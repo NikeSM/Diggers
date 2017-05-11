@@ -44,7 +44,7 @@ export class Tank extends Unit {
 
   public shoot(deltaTime: number): void {
     if (!this.shootCoolDownTimeout) {
-      this.gameState.addDynamicUnit(this.createBullet());
+      this.getGameState().addDynamicUnit(this.createBullet());
       this.shootCoolDownTimeout = 1;
     }
   }
@@ -65,11 +65,11 @@ export class Tank extends Unit {
   private createBullet(): Bullet {
     let bulletOptions = Bullet.mergeBulletOptions(this.bulletOptions, {
       unitOptions: {
-        game: this.game,
+        game: this.getGame(),
         sprite: Resources.getImages().bullets.bullet,
-        direction: this.direction,
-        position:  new Vector(this.position.x, this.position.y)
-          .add(this.direction.setLength(this.getRectangleSize().x / 2 + this.bulletOptions.unitOptions.size.x / 2 + 5))
+        direction: this.getDirection(),
+        position:  new Vector(this.getPosition().x, this.getPosition().y)
+          .add(this.getDirection().setLength(this.getRectangleSize().x / 2 + this.bulletOptions.unitOptions.size.x / 2 + 5))
       }
     });
     return new Bullet(bulletOptions);

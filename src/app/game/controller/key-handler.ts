@@ -18,23 +18,23 @@ export class Handlers {
 
   public handleInput(deltaTime: number): void {
   if (this.isDown('DOWN') || this.isDown('s')) {
-    this.game.gameState.player.rotate(Direction.DOWN);
+    this.game.getGameState().getPlayer().rotate(Direction.DOWN);
   }
 
   if (this.isDown('UP') || this.isDown('w')) {
-    this.game.gameState.player.rotate(Direction.UP);
+    this.game.getGameState().getPlayer().rotate(Direction.UP);
   }
 
   if (this.isDown('LEFT') || this.isDown('a')) {
-    this.game.gameState.player.rotate(Direction.LEFT);
+    this.game.getGameState().getPlayer().rotate(Direction.LEFT);
   }
 
   if (this.isDown('RIGHT') || this.isDown('d')) {
-    this.game.gameState.player.rotate(Direction.RIGHT);
+    this.game.getGameState().getPlayer().rotate(Direction.RIGHT);
   }
 
   if (this.isDown('SPACE')) {
-    this.game.gameState.player.shoot(deltaTime);
+    this.game.getGameState().getPlayer().shoot(deltaTime);
   }
 }
 

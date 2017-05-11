@@ -24,7 +24,7 @@ export class Renderer {
     this.contexts.main.drawImage(this.canvases.background, 0, 0);
     this.contexts.main.drawImage(this.canvases.fixed, 0, 0);
     this.renderEntities(
-      [this.game.gameState.player as Unit].concat(this.game.gameState.dynamicUnits),
+      [this.game.getGameState().getPlayer() as Unit].concat(this.game.getGameState().getDynamicUnits()),
       this.contexts.main
     );
   }
@@ -42,13 +42,13 @@ export class Renderer {
   }
 
   private renderStaticObjects(): void {
-    this.renderEntities(this.game.gameState.staticUnits, this.contexts.fixed);
+    this.renderEntities(this.game.getGameState().getStaticUnits(), this.contexts.fixed);
   }
 
   private renderEntity(entity: Unit, context: CanvasRenderingContext2D): void {
     context.save();
-    context.translate(entity.position.x, entity.position.y);
-    context.rotate(entity.direction.angleTo(new Vector(1, 0)));
+    context.translate(entity.getPosition().x, entity.getPosition().y);
+    context.rotate(entity.getDirection().angleTo(new Vector(1, 0)));
     entity.render(context);
     context.restore();
   }

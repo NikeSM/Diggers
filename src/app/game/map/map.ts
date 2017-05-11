@@ -25,7 +25,7 @@ export class Map {
   private canvases: appCanvasesType;
   private contexts: appContextsType = {main: null, fixed: null, background: null, ground: null};
   private game: Game;
-  private _positionMap: PositionMap;
+  private positionMap: PositionMap;
 
   // constructor() {}
 
@@ -41,13 +41,13 @@ export class Map {
       this.canvases[key].height = settings.canvasHeight;
       this.canvases[key].width = settings.canvasWidth;
     });
-    this._positionMap = new PositionMap({step: 25});
+    this.positionMap = new PositionMap({step: 25});
     this.game = game;
     this.addStartUnits();
   }
 
   public addStartUnits(): void {
-    this.game.gameState.player = new Tank({
+    this.game.getGameState().setPlayer(new Tank({
       unitOptions: {
         name: 'Player',
         position: new Vector(200, 200),
@@ -63,7 +63,7 @@ export class Map {
         immortal: false
       },
       bulletOptions: defaultBulletOptions
-    });
+    }));
     for (let i = 0; i < 50; i++) {
       let wallOptions = {
         unitOptions: {
@@ -72,15 +72,15 @@ export class Map {
           position: new Vector(5, i * 10 + 5)
         }
       };
-      this.game.gameState.addStaticUnit(new Wall(wallOptions));
+      this.game.getGameState().addStaticUnit(new Wall(wallOptions));
       wallOptions.unitOptions.position = new Vector(495, i * 10 + 5);
-      this.game.gameState.addStaticUnit(new Wall(wallOptions));
+      this.game.getGameState().addStaticUnit(new Wall(wallOptions));
       wallOptions.unitOptions.position = new Vector(i * 10 + 5, 5);
-      this.game.gameState.addStaticUnit(new Wall(wallOptions));
+      this.game.getGameState().addStaticUnit(new Wall(wallOptions));
       wallOptions.unitOptions.position = new Vector(i * 10 + 5, 495);
-      this.game.gameState.addStaticUnit(new Wall(wallOptions));
+      this.game.getGameState().addStaticUnit(new Wall(wallOptions));
     }
-    this.game.gameState.getAllUnits().map(unit => this._positionMap.setUnitPositionMap(unit));
+    this.game.getGameState().getAllUnits().map(unit => this.positionMap.setUnitPositionMap(unit));
   }
 
   public getCanvases(): appCanvasesType {
@@ -91,11 +91,7 @@ export class Map {
     return this.contexts;
   }
 
-  get positionMap(): PositionMap {
-    return this._positionMap;
-  }
-
-  set positionMap(value: PositionMap) {
-    this._positionMap = value;
+  public getPositionMap(): PositionMap {
+    return this.positionMap;
   }
 }

@@ -53,27 +53,27 @@ export class CollisionChecker {
   }
 
   private unitMoveCollision(movedUnit: Unit, newPosition: Vector, unit: Unit): boolean {
-    if (unit.shape === shapeType.CIRCLE && movedUnit.shape === shapeType.CIRCLE) {
+    if (unit.getShape() === shapeType.CIRCLE && movedUnit.getShape() === shapeType.CIRCLE) {
       return this.isCircleCollision({
-        circle1: { position: unit.position, radius: unit.getCircleSize() },
+        circle1: { position: unit.getPosition(), radius: unit.getCircleSize() },
         circle2: { position: newPosition, radius: movedUnit.getCircleSize() }
       });
     }
-    if (unit.shape === shapeType.RECTANGLE && movedUnit.shape === shapeType.RECTANGLE) {
+    if (unit.getShape() === shapeType.RECTANGLE && movedUnit.getShape() === shapeType.RECTANGLE) {
       return this.isRectsCollision({
-        rect1: { position: unit.position, size: unit.getRectangleSize() },
+        rect1: { position: unit.getPosition(), size: unit.getRectangleSize() },
         rect2: { position: newPosition, size: movedUnit.getRectangleSize() }
       });
     }
-    if (unit.shape === shapeType.CIRCLE && movedUnit.shape === shapeType.RECTANGLE) {
+    if (unit.getShape() === shapeType.CIRCLE && movedUnit.getShape() === shapeType.RECTANGLE) {
       return this.isRectCircleCollision({
-        circle: { position: unit.position, radius: unit.getCircleSize() },
+        circle: { position: unit.getPosition(), radius: unit.getCircleSize() },
         rect: { position: newPosition, size: movedUnit.getRectangleSize() }
       });
     }
-    if (unit.shape === shapeType.RECTANGLE && movedUnit.shape === shapeType.CIRCLE) {
+    if (unit.getShape() === shapeType.RECTANGLE && movedUnit.getShape() === shapeType.CIRCLE) {
       return this.isRectCircleCollision({
-        rect: { position: unit.position, size: unit.getRectangleSize() },
+        rect: { position: unit.getPosition(), size: unit.getRectangleSize() },
         circle: { position: newPosition, radius: movedUnit.getCircleSize() }
       });
     }
@@ -164,7 +164,7 @@ export class CollisionChecker {
       staticLeftUpPoint.x,
       staticRightUpPoint.x
     );
-    let distance_x = projectsLengthX.l - projectsLengthX.l1 - projectsLengthX.l2;ce
+    let distance_x = projectsLengthX.l - projectsLengthX.l1 - projectsLengthX.l2;
     let projectsLengthY = this.projectsLengths(
       dynamicLeftUpPoint.y,
       dynamicLeftDownPoint.y,

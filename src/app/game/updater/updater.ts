@@ -17,14 +17,14 @@ export class Updater {
   }
 
   public update(deltaTime: number, handlers: Handlers): void {
-    this.game.gameState.gameTime = this.game.gameState.gameTime + deltaTime;
+    this.game.getGameState().setGameTime(this.game.getGameState().getGameTime() + deltaTime);
     handlers.handleInput(deltaTime);
     this.updateEntities(deltaTime);
   }
 
   public updateEntities(deltaTime: number): void {
-    this.updateEntity(deltaTime, this.game.gameState.player);
-    this.game.gameState.dynamicUnits.map(unit =>
+    this.updateEntity(deltaTime, this.game.getGameState().getPlayer());
+    this.game.getGameState().getDynamicUnits().map(unit =>
       this.updateEntity(deltaTime, unit)
     );
   }

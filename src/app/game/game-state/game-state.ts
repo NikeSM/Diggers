@@ -2,10 +2,10 @@ import { Unit } from '../../models/unit/unit';
 import { Tank } from '../../models/unit/tanks/tank';
 
 export class GameState {
-  private _player: Tank;
-  private _gameTime: number;
-  private _staticUnits: Array<Unit> = [];
-  private _dynamicUnit: Array<Unit> = [];
+  private player: Tank;
+  private gameTime: number;
+  private staticUnits: Array<Unit> = [];
+  private dynamicUnits: Array<Unit> = [];
 
   constructor() {
     //
@@ -25,30 +25,31 @@ export class GameState {
   }
 
   public deleteUnit(unit: Unit): void {
-    this._dynamicUnit = this.dynamicUnits.filter(savedUnit => unit !== savedUnit);
+    this.dynamicUnits = this.dynamicUnits.filter(savedUnit => unit !== savedUnit);
     this.player = this.player === unit ? null : this.player;
   }
 
-  get staticUnits(): Array<Unit> {
-    return this._staticUnits;
+  public getPlayer(): Tank {
+    return this.player;
   }
 
-  get gameTime(): number {
-    return this._gameTime;
+  public setPlayer(player: Tank): void {
+    this.player = player;
   }
 
-  set gameTime(value: number) {
-    this._gameTime = value;
-  }
-  get player(): Tank {
-    return this._player;
+  public getDynamicUnits(): Array<Unit> {
+    return this.dynamicUnits;
   }
 
-  set player(value: Tank) {
-    this._player = value;
+  public getStaticUnits(): Array<Unit> {
+    return this.staticUnits;
   }
 
-  get dynamicUnits(): Array<Unit> {
-    return this._dynamicUnit;
+  public getGameTime(): number {
+    return this.gameTime;
+  }
+
+  public setGameTime(time: number): void {
+    this.gameTime = time;
   }
 }

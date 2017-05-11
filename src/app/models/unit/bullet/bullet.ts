@@ -27,12 +27,12 @@ export let defaultBulletOptions = {
 };
 
 export class Bullet extends Unit {
-  private _damage: number;
+  private damage: number;
 
   constructor(options: bulletOptions) {
     let mergedOptions = Bullet.mergeBulletOptions(defaultBulletOptions, options);
     super(mergedOptions.unitOptions);
-    this._damage = mergedOptions.damage;
+    this.damage = mergedOptions.damage;
   }
 
   public static mergeBulletOptions(opt_1: bulletOptions, opt_2: bulletOptions): bulletOptions {
@@ -42,11 +42,7 @@ export class Bullet extends Unit {
    };
   }
 
-  get damage(): number {
-    return this._damage;
-  }
-
-  set damage(value: number) {
-    this._damage = value;
+  public getDamage(): number {
+    return this.damage;
   }
 }

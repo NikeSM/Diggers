@@ -1,11 +1,16 @@
 import { Unit } from '../../../models/unit/unit';
 import { StopCollision } from './collision-classes/stop-collision';
+import { Bullet } from '../../../models/unit/bullet/bullet';
+import { DamageCollision } from './collision-classes/damage-collision';
 
 export interface ICollision {
 }
 
 export class CollisionFactory {
-  public static getCollision(activeUnit: Unit, staticUnit: Unit, distance: number): ICollision {
-    return  new StopCollision(activeUnit, staticUnit, distance);
+  public static getCollision(dynamicUnit: Unit, staticUnit: Unit, distance: number): ICollision {
+    if (dynamicUnit instanceof Bullet || staticUnit instanceof Bullet) {
+      return new DamageCollision(dynamicUnit, staticUnit);
+    }
+    return  new StopCollision(dynamicUnit, staticUnit, distance);
   }
 }

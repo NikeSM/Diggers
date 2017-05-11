@@ -83,7 +83,7 @@ export class Unit {
     return this.position.add(this.speed.multiply(deltaTime));
   }
 
-  public deleteUnit(): void {
+  public destroyUnit(): void {
     this.gameState.deleteUnit(this);
     this.game.getMap().getPositionMap().deleteUnitPositionMap(this);
   }
@@ -147,10 +147,6 @@ export class Unit {
 
   public getCircleSize(): number {
     return utils.circumscribedCircleRadius(this.size);
-  }
-
-  public destroyUnit(): void {
-    this.gameState.deleteUnit(this);
   }
 
   public attacked(damage: number): void {

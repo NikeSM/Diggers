@@ -14,12 +14,12 @@ export class DamageCollision implements ICollision {
 
   private action(): void {
     if (this.activeUnit instanceof Bullet) {
-      this.staticUnit.attacked(this.activeUnit.damage);
-      this.activeUnit.deleteUnit();
+      this.staticUnit.attacked(this.activeUnit.getDamage());
+      this.activeUnit.destroyUnit();
     }
     if (this.staticUnit instanceof Bullet) {
-      this.staticUnit.attacked(this.staticUnit.damage);
-      this.staticUnit.deleteUnit();
+      this.staticUnit.attacked(this.staticUnit.getDamage());
+      this.staticUnit.destroyUnit();
     }
   }
 }

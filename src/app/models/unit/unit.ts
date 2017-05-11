@@ -6,25 +6,25 @@ import { Game } from '../../game/game';
 import { Map } from '../../game/map/map';
 import { GameState } from '../../game/game-state/game-state';
 
-export enum shapeType {
-  CIRCLE,
-  RECTANGLE
-}
+// export enum shapeType {
+//   CIRCLE,
+//   RECTANGLE
+// }
 
 export type unitOptions = {
   game: Game;
   sprite: Sprite;
-  shape?: shapeType;
+  // shape?: shapeType;
   name?: string;
   position?: Vector;
   direction?: Vector;
   max_speed?: number
   min_speed?: number
   accelerate_module?: number;
-  radius?: number;
   size?: Vector;
   immortal?: boolean;
   health?: number
+  // radius?: number;
 }
 
 export let defaultUnitOptions: unitOptions = {
@@ -36,11 +36,11 @@ export let defaultUnitOptions: unitOptions = {
   accelerate_module: 0,
   max_speed: 0,
   min_speed: 0,
-  shape: shapeType.RECTANGLE,
+  // shape: shapeType.RECTANGLE,
   size: new Vector(50, 50),
-  radius: 25,
   immortal: false,
   health: 100
+  // radius: 25
 };
 export class Unit {
   private id: string;
@@ -53,14 +53,14 @@ export class Unit {
   private min_speed: number;
   private direction: Vector;
   private accelerate_module: number;
-  private radius: number;
   private size: Vector;
-  private shape: shapeType;
   private game: Game;
   private map: Map;
   private gameState: GameState;
   private immortal: boolean;
   private health: number;
+  // private radius: number;
+  // private shape: shapeType;
 
   constructor(options: unitOptions) {
     let mergedOptions = Unit.mergeUnitOptions(defaultUnitOptions, options);
@@ -71,13 +71,13 @@ export class Unit {
     this.accelerate_module = mergedOptions.accelerate_module;
     this.max_speed = mergedOptions.max_speed;
     this.min_speed = mergedOptions.min_speed;
-    this.radius = mergedOptions.radius;
     this.size = mergedOptions.size;
-    this.shape = mergedOptions.shape;
     this.game = mergedOptions.game;
     this.direction = mergedOptions.direction;
     this.immortal = mergedOptions.immortal;
     this.health = mergedOptions.health;
+    // this.radius = mergedOptions.radius;
+    // this.shape = mergedOptions.shape;
 
     this.map = this.game.getMap();
     this.gameState = this.game.getGameState();
@@ -150,36 +150,36 @@ export class Unit {
   }
 
   public getDrawPoint(): Vector {
-    switch (this.shape) {
-      case shapeType.CIRCLE:
-        return new Vector(-this.getRadius(), -this.getRadius());
-      case shapeType.RECTANGLE:
+    // switch (this.shape) {
+    //   case shapeType.CIRCLE:
+    //     return new Vector(-this.getRadius(), -this.getRadius());
+    //   case shapeType.RECTANGLE:
         return new Vector(-this.size.x / 2, -this.size.y / 2);
-      default:
-        return new Vector(0, 0);
-    }
+    //   default:
+    //     return new Vector(0, 0);
+    // }
   }
 
   public getRectangleSize(): Vector {
-    switch (this.shape) {
-      case shapeType.CIRCLE:
-        return new Vector(this.getRadius() * 2, this.getRadius() * 2);
-      case shapeType.RECTANGLE:
+    // switch (this.shape) {
+    //   case shapeType.CIRCLE:
+    //     return new Vector(this.getRadius() * 2, this.getRadius() * 2);
+    //   case shapeType.RECTANGLE:
         return this.size;
-      default:
-        return new Vector(0, 0);
-    }
+    //   default:
+    //     return new Vector(0, 0);
+    // }
   }
 
   public getCircleSize(): number {
-    switch (this.shape) {
-      case shapeType.CIRCLE:
-        return this.getRadius();
-      case shapeType.RECTANGLE:
+    // switch (this.shape) {
+    //   case shapeType.CIRCLE:
+    //     return this.getRadius();
+    //   case shapeType.RECTANGLE:
         return utils.circumscribedCircleRadius(this.size);
-      default:
-        return 0;
-    }
+    //   default:
+    //     return 0;
+    // }
   }
 
   public destroyUnit(): void {
@@ -207,11 +207,11 @@ export class Unit {
       accelerate_module: opt_2.accelerate_module || opt_1.accelerate_module || 0,
       max_speed: opt_2.max_speed || opt_1.min_speed || 0,
       min_speed: opt_2.min_speed || opt_1.min_speed || 0,
-      shape: opt_2.shape || opt_1.shape || shapeType.RECTANGLE,
       size: size.clone(),
-      radius: opt_2.radius || opt_1.radius || 25,
       immortal: opt_2.immortal || opt_1.immortal || false,
       health: opt_2.health || opt_1.health || 100
+      // shape: opt_2.shape || opt_1.shape || shapeType.RECTANGLE,
+      // radius: opt_2.radius || opt_1.radius || 25
     };
   }
 
@@ -236,9 +236,9 @@ export class Unit {
     return this.position;
   }
 
-  public getShape (): shapeType {
-    return this.shape;
-  }
+  // public getShape (): shapeType {
+  //   return this.shape;
+  // }
 
   public getDirection (): Vector {
     return this.direction;
@@ -253,14 +253,14 @@ export class Unit {
     return this.gameState;
   }
 
-  private getRadius(): number {
-    switch (this.shape) {
-      case shapeType.CIRCLE:
-        return this.radius;
-      case shapeType.RECTANGLE:
-        return utils.circumscribedCircleRadius(this.size);
-      default:
-        return 0;
-    }
-  }
+  // private getRadius(): number {
+  //   switch (this.shape) {
+  //     case shapeType.CIRCLE:
+  //       return this.radius;
+  //     case shapeType.RECTANGLE:
+  //       return utils.circumscribedCircleRadius(this.size);
+  //     default:
+  //       return 0;
+  //   }
+  // }
 }

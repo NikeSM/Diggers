@@ -1,5 +1,5 @@
 import { Vector } from '../../math-models/vector';
-import { shapeType, Unit, unitOptions } from '../unit';
+import { Unit, unitOptions } from '../unit';
 import { Bullet, bulletOptions, defaultBulletOptions } from '../bullet/bullet';
 import { Resources } from '../../../../resources/index';
 import { Direction } from '../../math-models/direction';
@@ -20,7 +20,6 @@ export let defaultTankOptions: tankOptions = {
     min_speed: 5,
     sprite: null,
     accelerate_module: 20,
-    shape: shapeType.RECTANGLE,
     game: null,
     immortal: false,
     health: 100
@@ -69,7 +68,9 @@ export class Tank extends Unit {
         sprite: Resources.getImages().bullets.bullet,
         direction: this.getDirection(),
         position:  new Vector(this.getPosition().x, this.getPosition().y)
-          .add(this.getDirection().setLength(this.getRectangleSize().x / 2 + this.bulletOptions.unitOptions.size.x / 2 + 5))
+          .add(
+            this.getDirection().setLength(this.getRectangleSize().x / 2 + this.bulletOptions.unitOptions.size.x / 2 + 5)
+          )
       }
     });
     return new Bullet(bulletOptions);

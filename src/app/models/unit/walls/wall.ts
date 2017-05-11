@@ -1,4 +1,4 @@
-import { shapeType, Unit, unitOptions } from '../unit';
+import { Unit, unitOptions } from '../unit';
 import { Vector } from '../../math-models/vector';
 import { Direction } from '../../math-models/direction';
 
@@ -16,9 +16,7 @@ export let defaultWallOptions: wallOptions = {
     accelerate_module: 0,
     max_speed: 0,
     min_speed: 0,
-    shape: shapeType.RECTANGLE,
     size: new Vector(10, 10),
-    radius: 5,
     immortal: true,
     health: 100
   }

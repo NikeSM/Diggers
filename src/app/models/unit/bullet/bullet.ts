@@ -1,5 +1,5 @@
 import { Vector } from '../../math-models/vector';
-import { shapeType, Unit, unitOptions } from '../unit';
+import { Unit, unitOptions } from '../unit';
 import { Direction } from '../../math-models/direction';
 
 export type bulletOptions = {
@@ -15,11 +15,9 @@ export let defaultBulletOptions = {
     position: new Vector(0, 0),
     direction: Direction.RIGHT,
     size: new Vector(5, 5),
-    radius: 2.5,
     max_speed: 200,
     min_speed: 200,
     accelerate_module: 5,
-    shape: shapeType.RECTANGLE,
     immortal: false,
     health: 100
   },

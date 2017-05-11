@@ -4,7 +4,7 @@ import { Wall } from '../../models/unit/walls/wall';
 import { Vector } from '../../models/math-models/vector';
 import { settings } from '../../../settings';
 import { Game } from '../game';
-import { shapeType } from '../../models/unit/unit';
+// import { shapeType } from '../../models/unit/unit';
 import { PositionMap } from './position-map';
 import { defaultBulletOptions } from '../../models/unit/bullet/bullet';
 
@@ -56,9 +56,7 @@ export class Map {
         min_speed: 5,
         sprite: Resources.getImages().tanks.tank,
         accelerate_module: 20,
-        shape: shapeType.RECTANGLE,
         game: this.game,
-        radius: 25,
         health: 100,
         immortal: false
       },

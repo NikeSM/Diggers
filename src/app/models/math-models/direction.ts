@@ -1,5 +1,5 @@
 import { Vector } from './vector';
-export const direction = {
+export const Direction = {
   UP: new Vector(0, -1),
   DOWN: new Vector(0, 1),
   LEFT: new Vector(-1, 0),

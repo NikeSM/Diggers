@@ -1,5 +1,5 @@
 import { Game } from '../game';
-import { direction } from '../../models/math-models/direction';
+import { Direction } from '../../models/math-models/direction';
 export class Handlers {
   private pressedKeys: {[key: string]: boolean} = {};
   private game: Game;
@@ -18,19 +18,19 @@ export class Handlers {
 
   public handleInput(deltaTime: number): void {
   if (this.isDown('DOWN') || this.isDown('s')) {
-    this.game.gameState.player.rotate(direction.DOWN);
+    this.game.gameState.player.rotate(Direction.DOWN);
   }
 
   if (this.isDown('UP') || this.isDown('w')) {
-    this.game.gameState.player.rotate(direction.UP);
+    this.game.gameState.player.rotate(Direction.UP);
   }
 
   if (this.isDown('LEFT') || this.isDown('a')) {
-    this.game.gameState.player.rotate(direction.LEFT);
+    this.game.gameState.player.rotate(Direction.LEFT);
   }
 
   if (this.isDown('RIGHT') || this.isDown('d')) {
-    this.game.gameState.player.rotate(direction.RIGHT);
+    this.game.gameState.player.rotate(Direction.RIGHT);
   }
 
   if (this.isDown('SPACE')) {

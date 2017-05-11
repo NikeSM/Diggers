@@ -2,7 +2,7 @@ import { Vector } from '../../math-models/vector';
 import { shapeType, Unit, unitOptions } from '../unit';
 import { Bullet, bulletOptions, defaultBulletOptions } from '../bullet/bullet';
 import { Resources } from '../../../../resources/index';
-import { direction } from '../../math-models/direction';
+import { Direction } from '../../math-models/direction';
 
 export type tankOptions = {
   unitOptions: unitOptions,
@@ -14,7 +14,7 @@ export let defaultTankOptions: tankOptions = {
   unitOptions: {
     name: 'Player',
     position: new Vector(200, 200),
-    direction: direction.RIGHT,
+    direction: Direction.RIGHT,
     size: new Vector(50, 50),
     max_speed: 200,
     min_speed: 5,

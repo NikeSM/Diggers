@@ -1,5 +1,5 @@
-import { ICollision } from '../i-collision';
 import { Unit } from '../../../../models/unit/unit';
+import { ICollision } from '../collision-factory';
 
 export class StopCollision implements ICollision {
   private activeUnit: Unit;

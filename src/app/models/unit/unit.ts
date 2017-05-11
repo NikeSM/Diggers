@@ -1,7 +1,7 @@
 import { utils } from '../../../utils';
 import { Vector } from '../math-models/vector';
 import { Sprite } from '../animation/sprite';
-import { direction } from '../math-models/direction';
+import { Direction } from '../math-models/direction';
 import { Game } from '../../game/game';
 import { Map } from '../../game/map/map';
 import { GameState } from '../../game/game-state/game-state';
@@ -32,7 +32,7 @@ export let defaultUnitOptions: unitOptions = {
   sprite: null,
   name: '',
   position: new Vector(0, 0),
-  direction: direction.RIGHT,
+  direction: Direction.RIGHT,
   accelerate_module: 0,
   max_speed: 0,
   min_speed: 0,
@@ -59,6 +59,8 @@ export class Unit {
   private _game: Game;
   private _map: Map;
   private _gameState: GameState;
+  private _immortal: boolean;
+  private _health: number;
 
   constructor(options: unitOptions) {
     let mergedOptions = Unit.mergeUnitOptions(defaultUnitOptions, options);
@@ -74,6 +76,8 @@ export class Unit {
     this._shape = mergedOptions.shape;
     this._game = mergedOptions.game;
     this._direction = mergedOptions.direction;
+    this._immortal = mergedOptions.immortal;
+    this._health = mergedOptions.health;
 
     this._map = this._game.map;
     this._gameState = this._game.gameState;
@@ -177,6 +181,19 @@ export class Unit {
     }
   }
 
+  public destroyUnit(): void {
+    this.gameState.deleteUnit(this);
+  }
+
+  public attacked(damage: number): void {
+    if (!this._immortal) {
+      this._health = this._health = damage;
+      if (this._health <= 0) {
+        this.destroyUnit();
+      }
+    }
+  }
+
   public static mergeUnitOptions(opt_1: unitOptions, opt_2: unitOptions): unitOptions {
     let position = opt_2.position || opt_1.position || new Vector(0, 0);
     let size = opt_2.size || opt_1.size || new Vector(50, 50);
@@ -184,7 +201,7 @@ export class Unit {
       game:  opt_2.game || opt_1.game || null,
       name: opt_2.name || opt_1.name || 'Unit',
       sprite: opt_2.sprite || opt_1.sprite || null,
-      direction: opt_2.direction || opt_1.direction || direction.RIGHT,
+      direction: opt_2.direction || opt_1.direction || Direction.RIGHT,
       position: position.clone(),
       accelerate_module: opt_2.accelerate_module || opt_1.accelerate_module || 0,
       max_speed: opt_2.max_speed || opt_1.min_speed || 0,

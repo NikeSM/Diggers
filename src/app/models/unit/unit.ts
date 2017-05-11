@@ -6,15 +6,9 @@ import { Game } from '../../game/game';
 import { Map } from '../../game/map/map';
 import { GameState } from '../../game/game-state/game-state';
 
-// export enum shapeType {
-//   CIRCLE,
-//   RECTANGLE
-// }
-
 export type unitOptions = {
   game: Game;
   sprite: Sprite;
-  // shape?: shapeType;
   name?: string;
   position?: Vector;
   direction?: Vector;
@@ -24,7 +18,6 @@ export type unitOptions = {
   size?: Vector;
   immortal?: boolean;
   health?: number
-  // radius?: number;
 }
 
 export let defaultUnitOptions: unitOptions = {
@@ -36,11 +29,9 @@ export let defaultUnitOptions: unitOptions = {
   accelerate_module: 0,
   max_speed: 0,
   min_speed: 0,
-  // shape: shapeType.RECTANGLE,
   size: new Vector(50, 50),
   immortal: false,
   health: 100
-  // radius: 25
 };
 export class Unit {
   private id: string;
@@ -59,8 +50,6 @@ export class Unit {
   private gameState: GameState;
   private immortal: boolean;
   private health: number;
-  // private radius: number;
-  // private shape: shapeType;
 
   constructor(options: unitOptions) {
     let mergedOptions = Unit.mergeUnitOptions(defaultUnitOptions, options);
@@ -76,8 +65,6 @@ export class Unit {
     this.direction = mergedOptions.direction;
     this.immortal = mergedOptions.immortal;
     this.health = mergedOptions.health;
-    // this.radius = mergedOptions.radius;
-    // this.shape = mergedOptions.shape;
 
     this.map = this.game.getMap();
     this.gameState = this.game.getGameState();
@@ -96,7 +83,7 @@ export class Unit {
     return this.position.add(this.speed.multiply(deltaTime));
   }
 
-  public deleteUnit (): void {
+  public deleteUnit(): void {
     this.gameState.deleteUnit(this);
     this.game.getMap().getPositionMap().deleteUnitPositionMap(this);
   }
@@ -140,9 +127,10 @@ export class Unit {
     }
   }
 
-  public stop(): void {
+  public stop(distance: number): void {
     this.setSpeed(new Vector(0, 0));
     this.accelerate = new Vector(0, 0);
+    this.position = this.position.add(this.direction.multiply(distance));
   }
 
   public render(context: CanvasRenderingContext2D): void {
@@ -150,36 +138,15 @@ export class Unit {
   }
 
   public getDrawPoint(): Vector {
-    // switch (this.shape) {
-    //   case shapeType.CIRCLE:
-    //     return new Vector(-this.getRadius(), -this.getRadius());
-    //   case shapeType.RECTANGLE:
-        return new Vector(-this.size.x / 2, -this.size.y / 2);
-    //   default:
-    //     return new Vector(0, 0);
-    // }
+    return new Vector(-this.size.x / 2, -this.size.y / 2);
   }
 
   public getRectangleSize(): Vector {
-    // switch (this.shape) {
-    //   case shapeType.CIRCLE:
-    //     return new Vector(this.getRadius() * 2, this.getRadius() * 2);
-    //   case shapeType.RECTANGLE:
-        return this.size;
-    //   default:
-    //     return new Vector(0, 0);
-    // }
+    return this.size;
   }
 
   public getCircleSize(): number {
-    // switch (this.shape) {
-    //   case shapeType.CIRCLE:
-    //     return this.getRadius();
-    //   case shapeType.RECTANGLE:
-        return utils.circumscribedCircleRadius(this.size);
-    //   default:
-    //     return 0;
-    // }
+    return utils.circumscribedCircleRadius(this.size);
   }
 
   public destroyUnit(): void {
@@ -199,7 +166,7 @@ export class Unit {
     let position = opt_2.position || opt_1.position || new Vector(0, 0);
     let size = opt_2.size || opt_1.size || new Vector(50, 50);
     return {
-      game:  opt_2.game || opt_1.game || null,
+      game: opt_2.game || opt_1.game || null,
       name: opt_2.name || opt_1.name || 'Unit',
       sprite: opt_2.sprite || opt_1.sprite || null,
       direction: opt_2.direction || opt_1.direction || Direction.RIGHT,
@@ -210,13 +177,11 @@ export class Unit {
       size: size.clone(),
       immortal: opt_2.immortal || opt_1.immortal || false,
       health: opt_2.health || opt_1.health || 100
-      // shape: opt_2.shape || opt_1.shape || shapeType.RECTANGLE,
-      // radius: opt_2.radius || opt_1.radius || 25
     };
   }
 
   public setDirection(value: Vector): void {
-    if (this.direction && - value.dot(this.direction) === 0) {
+    if (this.direction && -value.dot(this.direction) === 0) {
       this.size = new Vector(this.size.y, this.size.x);
     }
     this.direction = value;
@@ -228,39 +193,24 @@ export class Unit {
     this.speed = speed;
   }
 
-  public getId (): string {
+  public getId(): string {
     return this.id;
   }
 
-  public getPosition (): Vector {
+  public getPosition(): Vector {
     return this.position;
   }
 
-  // public getShape (): shapeType {
-  //   return this.shape;
-  // }
-
-  public getDirection (): Vector {
+  public getDirection(): Vector {
     return this.direction;
   }
 
 
-  public getGame (): Game {
+  public getGame(): Game {
     return this.game;
   }
 
-  public getGameState (): GameState {
+  public getGameState(): GameState {
     return this.gameState;
   }
-
-  // private getRadius(): number {
-  //   switch (this.shape) {
-  //     case shapeType.CIRCLE:
-  //       return this.radius;
-  //     case shapeType.RECTANGLE:
-  //       return utils.circumscribedCircleRadius(this.size);
-  //     default:
-  //       return 0;
-  //   }
-  // }
 }

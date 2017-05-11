@@ -4,7 +4,6 @@ import { Wall } from '../../models/unit/walls/wall';
 import { Vector } from '../../models/math-models/vector';
 import { settings } from '../../../settings';
 import { Game } from '../game';
-// import { shapeType } from '../../models/unit/unit';
 import { PositionMap } from './position-map';
 import { defaultBulletOptions } from '../../models/unit/bullet/bullet';
 
@@ -26,8 +25,6 @@ export class Map {
   private contexts: appContextsType = {main: null, fixed: null, background: null, ground: null};
   private game: Game;
   private positionMap: PositionMap;
-
-  // constructor() {}
 
   public create(game: Game): void {
     this.canvases = {

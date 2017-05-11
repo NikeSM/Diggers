@@ -5,7 +5,7 @@ export interface ICollision {
 }
 
 export class CollisionFactory {
-  public static getCollision(activeUnit: Unit, staticUnit: Unit): ICollision {
-    return  new StopCollision(activeUnit, staticUnit);
+  public static getCollision(activeUnit: Unit, staticUnit: Unit, distance: number): ICollision {
+    return  new StopCollision(activeUnit, staticUnit, distance);
   }
 }

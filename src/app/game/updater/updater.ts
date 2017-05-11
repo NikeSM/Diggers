@@ -30,9 +30,7 @@ export class Updater {
   }
 
   private updateEntity(deltaTime: number, unit: Unit): void {
-    if (this.collisionChecker.collisionWithStatic(unit, unit.getNewPosition(deltaTime))) {
-      unit.stop();
-    } else {
+    if (!this.collisionChecker.collisionWithStatic(unit, unit.getNewPosition(deltaTime))) {
       unit.update(deltaTime);
       this.positionMap.changeUnitPositionMap(unit);
     }

@@ -3,6 +3,7 @@ import { Handlers } from './controller/key-handler';
 import { Renderer } from './renderer/renderer';
 import { Updater } from './updater/updater';
 import { appCanvasesType, appContextsType, Map } from './map/map';
+import { Ground } from './ground/ground';
 
 export class Game {
   private canvases: appCanvasesType;
@@ -13,6 +14,8 @@ export class Game {
   private gameState: GameState;
   private updater: Updater;
   private map: Map;
+  private ground: Ground;
+
 
   constructor() {
     this.start = this.start.bind(this);
@@ -23,14 +26,16 @@ export class Game {
   }
 
   public start(): void {
-    let map = new Map();
-    this.map = map;
-    map.create(this);
-    this.updater = new Updater(this, map.getPositionMap());
-    this.canvases = map.getCanvases();
-    this.contexts = map.getContexts();
+    this.map = new Map();
+    this.map.create(this);
+    this.updater = new Updater(this, this.map.getPositionMap());
+    this.canvases = this.map.getCanvases();
+    this.contexts = this.map.getContexts();
+    this.ground = new Ground(this.contexts.ground);
     this.renderer = new Renderer(this.contexts, this.canvases, this);
     document.body.appendChild(this.canvases.main);
+
+
     this.lastTime = Date.now();
     this.renderer.preRender();
     this.frame();
@@ -42,6 +47,10 @@ export class Game {
 
   public getMap(): Map {
     return this.map;
+  }
+
+  public getGround(): Ground {
+    return this.ground;
   }
 
   private frame(): void {

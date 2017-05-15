@@ -56,7 +56,6 @@ export class Unit {
     this.id = utils.generateId();
     this.name = mergedOptions.name;
     this.sprite = mergedOptions.sprite;
-    this.position = mergedOptions.position;
     this.accelerate_module = mergedOptions.accelerate_module;
     this.max_speed = mergedOptions.max_speed;
     this.min_speed = mergedOptions.min_speed;
@@ -65,6 +64,7 @@ export class Unit {
     this.direction = mergedOptions.direction;
     this.immortal = mergedOptions.immortal;
     this.health = mergedOptions.health;
+    this.position = mergedOptions.position;
 
     this.map = this.game.getMap();
     this.gameState = this.game.getGameState();
@@ -74,7 +74,7 @@ export class Unit {
 
 
   public update(deltaTime: number): void {
-    this.position = this.getNewPosition(deltaTime);
+    this.setPosition(this.getNewPosition(deltaTime));
     this.setSpeed(this.speed.add(this.accelerate.multiply(deltaTime)));
     this.sprite.update(deltaTime);
   }
@@ -130,7 +130,7 @@ export class Unit {
   public stop(distance: number): void {
     this.setSpeed(new Vector(0, 0));
     this.accelerate = new Vector(0, 0);
-    this.position = this.position.add(this.direction.multiply(distance));
+    this.setPosition(this.position.add(this.direction.multiply(distance)));
   }
 
   public render(context: CanvasRenderingContext2D): void {
@@ -143,10 +143,6 @@ export class Unit {
 
   public getRectangleSize(): Vector {
     return this.size;
-  }
-
-  public getCircleSize(): number {
-    return utils.circumscribedCircleRadius(this.size);
   }
 
   public attacked(damage: number): void {
@@ -208,5 +204,10 @@ export class Unit {
 
   public getGameState(): GameState {
     return this.gameState;
+  }
+
+  private setPosition(position: Vector): void {
+    this.position = position;
+    this.game.getGround().clearUnitPosition(this);
   }
 }

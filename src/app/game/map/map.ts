@@ -50,12 +50,13 @@ export class Map {
         position: new Vector(200, 200),
         size: new Vector(50, 50),
         max_speed: 200,
-        min_speed: 5,
+        min_speed: 0,
         sprite: Resources.getImages().tanks.tank,
         accelerate_module: 20,
         game: this.game,
         health: 100,
-        immortal: false
+        immortal: false,
+        underGroundSpeed: 150
       },
       bulletOptions: defaultBulletOptions
     }));
@@ -88,5 +89,9 @@ export class Map {
 
   public getPositionMap(): PositionMap {
     return this.positionMap;
+  }
+
+  public getSize(): Vector {
+    return new Vector(settings.canvasWidth, settings.canvasHeight);
   }
 }

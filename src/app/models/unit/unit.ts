@@ -17,7 +17,8 @@ export type unitOptions = {
   accelerate_module?: number;
   size?: Vector;
   immortal?: boolean;
-  health?: number
+  health?: number;
+  underGroundSpeed?: number;
 }
 
 export let defaultUnitOptions: unitOptions = {
@@ -31,8 +32,13 @@ export let defaultUnitOptions: unitOptions = {
   min_speed: 0,
   size: new Vector(50, 50),
   immortal: false,
-  health: 100
+  health: 100,
+  underGroundSpeed: 0
 };
+export type unitPoints = {
+  leftUp: Vector;
+  rightDown: Vector;
+}
 export class Unit {
   private id: string;
   private name: string;
@@ -50,6 +56,7 @@ export class Unit {
   private gameState: GameState;
   private immortal: boolean;
   private health: number;
+  private underGroundSpeed: number;
 
   constructor(options: unitOptions) {
     let mergedOptions = Unit.mergeUnitOptions(defaultUnitOptions, options);
@@ -65,6 +72,7 @@ export class Unit {
     this.immortal = mergedOptions.immortal;
     this.health = mergedOptions.health;
     this.position = mergedOptions.position;
+    this.underGroundSpeed = mergedOptions.underGroundSpeed;
 
     this.map = this.game.getMap();
     this.gameState = this.game.getGameState();
@@ -168,7 +176,8 @@ export class Unit {
       min_speed: opt_2.min_speed || opt_1.min_speed || 0,
       size: size.clone(),
       immortal: opt_2.immortal || opt_1.immortal || false,
-      health: opt_2.health || opt_1.health || 100
+      health: opt_2.health || opt_1.health || 100,
+      underGroundSpeed: opt_2.underGroundSpeed || opt_1.underGroundSpeed || 0
     };
   }
 
@@ -204,6 +213,19 @@ export class Unit {
 
   public getGameState(): GameState {
     return this.gameState;
+  }
+
+  public groundCollision(): void {
+    this.speed.length() > this.underGroundSpeed && this.setSpeed(this.speed.setLength(this.underGroundSpeed));
+  }
+
+  public getUnitPoints(): unitPoints {
+    return {
+      leftUp: new Vector(this.getPosition().x - this.getRectangleSize().x / 2,
+                         this.getPosition().y - this.getRectangleSize().y / 2),
+      rightDown: new Vector(this.getPosition().x + this.getRectangleSize().x / 2,
+                            this.getPosition().y + this.getRectangleSize().y / 2)
+    };
   }
 
   private setPosition(position: Vector): void {

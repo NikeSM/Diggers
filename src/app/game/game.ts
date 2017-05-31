@@ -31,7 +31,7 @@ export class Game {
     this.updater = new Updater(this, this.map.getPositionMap());
     this.canvases = this.map.getCanvases();
     this.contexts = this.map.getContexts();
-    this.ground = new Ground(this.contexts.ground);
+    this.ground = new Ground(this.contexts.ground, this.map.getSize());
     this.renderer = new Renderer(this.contexts, this.canvases, this);
     document.body.appendChild(this.canvases.main);
 

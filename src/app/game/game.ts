@@ -21,18 +21,18 @@ export class Game {
     this.start = this.start.bind(this);
     this.frame = this.frame.bind(this);
     this.gameState = new GameState();
-    this.handlers = new Handlers(this);
+    this.handlers = new Handlers(this.gameState);
     this.contexts = {main: null, fixed: null, background: null, ground: null};
   }
 
   public start(): void {
     this.map = new Map();
-    this.map.create(this);
-    this.updater = new Updater(this, this.map.getPositionMap());
+    this.map.create(this.gameState);
     this.canvases = this.map.getCanvases();
     this.contexts = this.map.getContexts();
-    this.ground = new Ground(this.contexts.ground, this.map.getSize());
-    this.renderer = new Renderer(this.contexts, this.canvases, this);
+    this.ground = new Ground(this.contexts.ground, Map.getSize(), this.gameState);
+    this.renderer = new Renderer(this.contexts, this.canvases, this.gameState);
+    this.updater = new Updater(this.gameState, this.map.getPositionMap(), this.ground);
     document.body.appendChild(this.canvases.main);
 
 
@@ -40,18 +40,6 @@ export class Game {
     this.renderer.preRender();
     this.frame();
   };
-
-  public getGameState(): GameState {
-    return this.gameState;
-  }
-
-  public getMap(): Map {
-    return this.map;
-  }
-
-  public getGround(): Ground {
-    return this.ground;
-  }
 
   private frame(): void {
     let now: number = Date.now();

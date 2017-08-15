@@ -2,12 +2,8 @@ import { utils } from '../../../utils';
 import { Vector } from '../math-models/vector';
 import { Sprite } from '../animation/sprite';
 import { Direction } from '../math-models/direction';
-import { Game } from '../../game/game';
-import { Map } from '../../game/map/map';
-import { GameState } from '../../game/game-state/game-state';
 
 export type unitOptions = {
-  game: Game;
   sprite: Sprite;
   name?: string;
   position?: Vector;
@@ -22,7 +18,6 @@ export type unitOptions = {
 }
 
 export let defaultUnitOptions: unitOptions = {
-  game: null,
   sprite: null,
   name: '',
   position: new Vector(0, 0),
@@ -35,11 +30,31 @@ export let defaultUnitOptions: unitOptions = {
   health: 100,
   underGroundSpeed: 0
 };
+
 export type unitPoints = {
   leftUp: Vector;
   rightDown: Vector;
 }
-export class Unit {
+
+export let mergeUnitOptions = (opt_1: unitOptions, opt_2: unitOptions): unitOptions => {
+  let position = opt_2.position || opt_1.position || new Vector(0, 0);
+  let size = opt_2.size || opt_1.size || new Vector(50, 50);
+  return {
+    name: opt_2.name || opt_1.name || 'Unit',
+    sprite: opt_2.sprite || opt_1.sprite || null,
+    direction: opt_2.direction || opt_1.direction || Direction.RIGHT,
+    position: position.clone(),
+    accelerate_module: opt_2.accelerate_module || opt_1.accelerate_module || 0,
+    max_speed: opt_2.max_speed || opt_1.min_speed || 0,
+    min_speed: opt_2.min_speed || opt_1.min_speed || 0,
+    size: size.clone(),
+    immortal: opt_2.immortal || opt_1.immortal || false,
+    health: opt_2.health || opt_1.health || 100,
+    underGroundSpeed: opt_2.underGroundSpeed || opt_1.underGroundSpeed || 0
+  };
+};
+
+export class Unit implements IUnit {
   private id: string;
   private name: string;
   private position: Vector;
@@ -51,15 +66,12 @@ export class Unit {
   private direction: Vector;
   private accelerate_module: number;
   private size: Vector;
-  private game: Game;
-  private map: Map;
-  private gameState: GameState;
   private immortal: boolean;
   private health: number;
   private underGroundSpeed: number;
 
   constructor(options: unitOptions) {
-    let mergedOptions = Unit.mergeUnitOptions(defaultUnitOptions, options);
+    let mergedOptions = mergeUnitOptions(defaultUnitOptions, options);
     this.id = utils.generateId();
     this.name = mergedOptions.name;
     this.sprite = mergedOptions.sprite;
@@ -67,15 +79,12 @@ export class Unit {
     this.max_speed = mergedOptions.max_speed;
     this.min_speed = mergedOptions.min_speed;
     this.size = mergedOptions.size;
-    this.game = mergedOptions.game;
     this.direction = mergedOptions.direction;
     this.immortal = mergedOptions.immortal;
     this.health = mergedOptions.health;
     this.position = mergedOptions.position;
     this.underGroundSpeed = mergedOptions.underGroundSpeed;
 
-    this.map = this.game.getMap();
-    this.gameState = this.game.getGameState();
     this.accelerate = new Vector(0, 0);
     this.setSpeed(this.direction);
   }
@@ -89,11 +98,6 @@ export class Unit {
 
   public getNewPosition(deltaTime: number): Vector {
     return this.position.add(this.speed.multiply(deltaTime));
-  }
-
-  public destroyUnit(): void {
-    this.gameState.deleteUnit(this);
-    this.game.getMap().getPositionMap().deleteUnitPositionMap(this);
   }
 
   public rotate(direction: Vector): void {
@@ -135,6 +139,7 @@ export class Unit {
     }
   }
 
+  // distance - расстояние до останаовки
   public stop(distance: number): void {
     this.setSpeed(new Vector(0, 0));
     this.accelerate = new Vector(0, 0);
@@ -156,29 +161,7 @@ export class Unit {
   public attacked(damage: number): void {
     if (!this.immortal) {
       this.health = this.health = damage;
-      if (this.health <= 0) {
-        this.destroyUnit();
-      }
     }
-  }
-
-  public static mergeUnitOptions(opt_1: unitOptions, opt_2: unitOptions): unitOptions {
-    let position = opt_2.position || opt_1.position || new Vector(0, 0);
-    let size = opt_2.size || opt_1.size || new Vector(50, 50);
-    return {
-      game: opt_2.game || opt_1.game || null,
-      name: opt_2.name || opt_1.name || 'Unit',
-      sprite: opt_2.sprite || opt_1.sprite || null,
-      direction: opt_2.direction || opt_1.direction || Direction.RIGHT,
-      position: position.clone(),
-      accelerate_module: opt_2.accelerate_module || opt_1.accelerate_module || 0,
-      max_speed: opt_2.max_speed || opt_1.min_speed || 0,
-      min_speed: opt_2.min_speed || opt_1.min_speed || 0,
-      size: size.clone(),
-      immortal: opt_2.immortal || opt_1.immortal || false,
-      health: opt_2.health || opt_1.health || 100,
-      underGroundSpeed: opt_2.underGroundSpeed || opt_1.underGroundSpeed || 0
-    };
   }
 
   public setDirection(value: Vector): void {
@@ -190,7 +173,7 @@ export class Unit {
 
   public setSpeed(value: Vector): void {
     let speed = value.length() < this.max_speed ? value : value.setLength(this.max_speed);
-    speed = value.length() > this.min_speed ? value : value.setLength(this.min_speed);
+    speed = speed.length() > this.min_speed ? speed : speed.setLength(this.min_speed);
     this.speed = speed;
   }
 
@@ -204,15 +187,6 @@ export class Unit {
 
   public getDirection(): Vector {
     return this.direction;
-  }
-
-
-  public getGame(): Game {
-    return this.game;
-  }
-
-  public getGameState(): GameState {
-    return this.gameState;
   }
 
   public groundCollision(): void {
@@ -230,6 +204,29 @@ export class Unit {
 
   private setPosition(position: Vector): void {
     this.position = position;
-    this.game.getGround().clearUnitPosition(this);
   }
+}
+
+export interface IUnit {
+  render(context: CanvasRenderingContext2D): void;
+  update(deltaTime: number): void;
+  rotate(direction: Vector): void;
+  rotateLeft(): void;
+  rotateRight(): void;
+  forward(): void;
+  back(): void;
+  stop(distance: number): void;
+  attacked(damage: number): void;
+  groundCollision(): void;
+
+  setDirection(value: Vector): void;
+  setSpeed(value: Vector): void;
+
+  getDrawPoint(): Vector;
+  getRectangleSize(): Vector;
+  getId(): string;
+  getPosition(): Vector;
+  getDirection(): Vector;
+  getNewPosition(deltaTime: number): Vector;
+  getUnitPoints(): unitPoints;
 }

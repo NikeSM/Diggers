@@ -1,12 +1,12 @@
-import { Unit } from '../../../../models/unit/unit';
+import { IUnit } from '../../../../models/unit/unit';
 import { ICollision } from '../collision-factory';
 
 export class StopCollision implements ICollision {
-  private activeUnit: Unit;
-  private staticUnit: Unit;
+  private activeUnit: IUnit;
+  private staticUnit: IUnit;
   private distance: number;
 
-  constructor(activeUnit: Unit, staticUnit: Unit, distance: number) {
+  constructor(activeUnit: IUnit, staticUnit: IUnit, distance: number) {
     this.activeUnit = activeUnit;
     this.staticUnit = staticUnit;
     this.distance = distance;

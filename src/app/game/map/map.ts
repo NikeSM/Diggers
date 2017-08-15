@@ -3,9 +3,9 @@ import { Tank } from '../../models/unit/tanks/tank';
 import { Wall } from '../../models/unit/walls/wall';
 import { Vector } from '../../models/math-models/vector';
 import { settings } from '../../../settings';
-import { Game } from '../game';
 import { PositionMap } from './position-map';
 import { defaultBulletOptions } from '../../models/unit/bullet/bullet';
+import { GameState } from '../game-state/game-state';
 
 export type appCanvasesType = {
   main: HTMLCanvasElement,
@@ -23,10 +23,10 @@ export type appContextsType = {
 export class Map {
   private canvases: appCanvasesType;
   private contexts: appContextsType = {main: null, fixed: null, background: null, ground: null};
-  private game: Game;
+  private gameState: GameState;
   private positionMap: PositionMap;
 
-  public create(game: Game): void {
+  public create(gameState: GameState): void {
     this.canvases = {
       main: document.createElement('canvas'),
       fixed: document.createElement('canvas'),
@@ -39,12 +39,12 @@ export class Map {
       this.canvases[key].width = settings.canvasWidth;
     });
     this.positionMap = new PositionMap({step: 25});
-    this.game = game;
+    this.gameState = gameState;
     this.addStartUnits();
   }
 
   public addStartUnits(): void {
-    this.game.getGameState().setPlayer(new Tank({
+    this.gameState.setPlayer(new Tank({
       unitOptions: {
         name: 'Player',
         position: new Vector(200, 200),
@@ -53,7 +53,6 @@ export class Map {
         min_speed: 0,
         sprite: Resources.getImages().tanks.tank,
         accelerate_module: 20,
-        game: this.game,
         health: 100,
         immortal: false,
         underGroundSpeed: 150
@@ -63,20 +62,19 @@ export class Map {
     for (let i = 0; i < 50; i++) {
       let wallOptions = {
         unitOptions: {
-          game: this.game,
           sprite: Resources.getImages().walls.wall,
           position: new Vector(5, i * 10 + 5)
         }
       };
-      this.game.getGameState().addStaticUnit(new Wall(wallOptions));
+      this.gameState.addStaticUnit(new Wall(wallOptions));
       wallOptions.unitOptions.position = new Vector(495, i * 10 + 5);
-      this.game.getGameState().addStaticUnit(new Wall(wallOptions));
+      this.gameState.addStaticUnit(new Wall(wallOptions));
       wallOptions.unitOptions.position = new Vector(i * 10 + 5, 5);
-      this.game.getGameState().addStaticUnit(new Wall(wallOptions));
+      this.gameState.addStaticUnit(new Wall(wallOptions));
       wallOptions.unitOptions.position = new Vector(i * 10 + 5, 495);
-      this.game.getGameState().addStaticUnit(new Wall(wallOptions));
+      this.gameState.addStaticUnit(new Wall(wallOptions));
     }
-    this.game.getGameState().getAllUnits().map(unit => this.positionMap.setUnitPositionMap(unit));
+    this.gameState.getAllUnits().map(unit => this.positionMap.setUnitPositionMap(unit));
   }
 
   public getCanvases(): appCanvasesType {
@@ -91,7 +89,7 @@ export class Map {
     return this.positionMap;
   }
 
-  public getSize(): Vector {
+  public static getSize(): Vector {
     return new Vector(settings.canvasWidth, settings.canvasHeight);
   }
 }

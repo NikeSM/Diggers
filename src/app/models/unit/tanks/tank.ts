@@ -1,6 +1,6 @@
 import { Vector } from '../../math-models/vector';
-import { Unit, unitOptions } from '../unit';
-import { Bullet, bulletOptions, defaultBulletOptions } from '../bullet/bullet';
+import { mergeUnitOptions, IUnit, Unit, unitOptions } from '../unit';
+import { Bullet, bulletOptions, defaultBulletOptions, mergeBulletOptions } from '../bullet/bullet';
 import { Resources } from '../../../../resources/index';
 import { Direction } from '../../math-models/direction';
 
@@ -20,7 +20,6 @@ export let defaultTankOptions: tankOptions = {
     min_speed: 5,
     sprite: null,
     accelerate_module: 20,
-    game: null,
     immortal: false,
     health: 100
   },
@@ -28,24 +27,33 @@ export let defaultTankOptions: tankOptions = {
   shootCoolDown: 1000
 };
 
-export class Tank extends Unit {
+export let mergeTankOptions = (opt_1: tankOptions, opt_2: tankOptions): tankOptions => {
+  return {
+    unitOptions: mergeUnitOptions(opt_1.unitOptions, opt_2.unitOptions),
+    bulletOptions: mergeBulletOptions(opt_1.bulletOptions, opt_2.bulletOptions),
+    shootCoolDown: opt_2.shootCoolDown || opt_1.shootCoolDown || 1000
+  };
+};
+
+export class Tank extends Unit implements ITank {
   private bulletOptions: bulletOptions;
   private shootCoolDown: number;
   private shootCoolDownTimeout: number;
   constructor(options: tankOptions) {
     super(options.unitOptions);
-    let mergedOptions = Tank.mergeTankOptions(defaultTankOptions, options);
+    let mergedOptions = mergeTankOptions(defaultTankOptions, options);
     this.bulletOptions = mergedOptions.bulletOptions;
     this.shootCoolDown = mergedOptions.shootCoolDown;
     this.shootCoolDownTimeout = 0;
     this.shoot = this.shoot.bind(this);
   }
 
-  public shoot(deltaTime: number): void {
+  public shoot(): Bullet {
     if (!this.shootCoolDownTimeout) {
-      this.getGameState().addDynamicUnit(this.createBullet());
       this.shootCoolDownTimeout = 1;
+      return this.createBullet();
     }
+    return null;
   }
 
   public update(deltaTime: number): void {
@@ -53,18 +61,9 @@ export class Tank extends Unit {
     this.shootCoolDownTimeout = this.shootCoolDownTimeout < deltaTime ? 0 : this.shootCoolDownTimeout - deltaTime;
   }
 
-  public static mergeTankOptions(opt_1: tankOptions, opt_2: tankOptions): tankOptions {
-    return {
-      unitOptions: Unit.mergeUnitOptions(opt_1.unitOptions, opt_2.unitOptions),
-      bulletOptions: Bullet.mergeBulletOptions(opt_1.bulletOptions, opt_2.bulletOptions),
-      shootCoolDown: opt_2.shootCoolDown || opt_1.shootCoolDown || 1000
-    };
-  }
-
   private createBullet(): Bullet {
-    let bulletOptions = Bullet.mergeBulletOptions(this.bulletOptions, {
+    let bulletOptions = mergeBulletOptions(this.bulletOptions, {
       unitOptions: {
-        game: this.getGame(),
         sprite: Resources.getImages().bullets.bullet,
         direction: this.getDirection(),
         position:  new Vector(this.getPosition().x, this.getPosition().y)
@@ -75,4 +74,8 @@ export class Tank extends Unit {
     });
     return new Bullet(bulletOptions);
   }
+}
+
+export interface ITank extends IUnit {
+  shoot(): Bullet;
 }

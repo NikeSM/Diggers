@@ -15,6 +15,7 @@ export class Resources {
           Resources.imageCache[name] = img;
           resolve();
         };
+        img.onerror = reject;
         img.src = Resources.imageFolder + name;
       });
     });

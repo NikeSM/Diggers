@@ -1,18 +1,18 @@
 import { Vector } from '../../models/math-models/vector';
 import { appContextsType, appCanvasesType } from '../map/map';
 import { Resources } from '../../../resources/index';
-import { Game } from '../game';
-import { Unit } from '../../models/unit/unit';
+import { IUnit } from '../../models/unit/unit';
+import { GameState } from '../game-state/game-state';
 
 export class Renderer {
   private contexts: appContextsType;
   private canvases: appCanvasesType;
-  private game: Game;
+  private gameState: GameState;
 
-  constructor(contexts: appContextsType, canvases: appCanvasesType, game: Game) {
+  constructor(contexts: appContextsType, canvases: appCanvasesType, gameState: GameState) {
     this.contexts = contexts;
     this.canvases = canvases;
-    this.game = game;
+    this.gameState = gameState;
   }
 
   public preRender(): void {
@@ -24,16 +24,16 @@ export class Renderer {
     this.contexts.main.drawImage(this.canvases.background, 0, 0);
     this.contexts.main.drawImage(this.canvases.ground, 0, 0);
     this.contexts.main.drawImage(this.canvases.fixed, 0, 0);
-    this.renderEntities(
-      [this.game.getGameState().getPlayer() as Unit].concat(this.game.getGameState().getDynamicUnits()),
+    Renderer.renderEntities(
+      [this.gameState.getPlayer() as IUnit].concat(this.gameState.getDynamicUnits()),
       this.contexts.main
     );
   }
 
 
-  private renderEntities(list: Array<Unit>, context: CanvasRenderingContext2D): void {
+  private static renderEntities(list: Array<IUnit>, context: CanvasRenderingContext2D): void {
     for (let i = 0; i < list.length; i++) {
-      this.renderEntity(list[i], context);
+      Renderer.renderEntity(list[i], context);
     }
   }
 
@@ -43,10 +43,10 @@ export class Renderer {
   }
 
   private renderStaticObjects(): void {
-    this.renderEntities(this.game.getGameState().getStaticUnits(), this.contexts.fixed);
+    Renderer.renderEntities(this.gameState.getStaticUnits(), this.contexts.fixed);
   }
 
-  private renderEntity(entity: Unit, context: CanvasRenderingContext2D): void {
+  private static renderEntity(entity: IUnit, context: CanvasRenderingContext2D): void {
     context.save();
     context.translate(entity.getPosition().x, entity.getPosition().y);
     context.rotate(entity.getDirection().angleTo(new Vector(1, 0)));

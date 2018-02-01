@@ -1,8 +1,18 @@
 import { Vector } from '../../models/math-models/vector';
 import { appContextsType, appCanvasesType } from '../map/map';
-import { Resources } from '../../../resources/index';
+import { Resources } from '../../../resources';
 import { IUnit } from '../../models/unit/unit';
 import { GameState } from '../game-state/game-state';
+import { Sprite } from '../../models/animation/sprite';
+
+export type renderObjectArgs = {
+  context: CanvasRenderingContext2D,
+  sprite: Sprite,
+  position: Vector,
+  direction: number,
+  drawPoint: Vector,
+  size: Vector
+}
 
 export class Renderer {
   private contexts: appContextsType;
@@ -37,9 +47,15 @@ export class Renderer {
     }
   }
 
-  private renderBackground(): void {
-    Resources.getImages().backgrounds.background
-      .render(this.contexts.background, new Vector(0, 0), new Vector(500, 500));
+ private renderBackground(): void {
+   Renderer.renderObject({
+     context: this.contexts.background,
+     position: new Vector(0, 0),
+     direction: 0,
+     sprite: Resources.getImages().backgrounds.background,
+     drawPoint: new Vector(0, 0),
+     size: new Vector(500, 500)
+   });
   }
 
   private renderStaticObjects(): void {
@@ -47,10 +63,22 @@ export class Renderer {
   }
 
   private static renderEntity(entity: IUnit, context: CanvasRenderingContext2D): void {
-    context.save();
-    context.translate(entity.getPosition().x, entity.getPosition().y);
-    context.rotate(entity.getDirection().angleTo(new Vector(1, 0)));
-    entity.render(context);
-    context.restore();
+    Renderer.renderObject({
+      context: context,
+      position: entity.getPosition(),
+      direction: entity.getDirection().angleTo(new Vector(1, 0)),
+      sprite: entity.getSprite(),
+      drawPoint: entity.getDrawPoint(),
+      size: entity.getRectangleSize()
+    });
+  }
+
+  private static renderObject(args: renderObjectArgs): void {
+    args.context.save();
+    args.context.translate(args.position.x, args.position.y);
+    args.context.rotate(args.sprite.getAngle());
+    args.context.rotate(args.direction);
+    args.sprite.render(args.context, args.drawPoint, args.size);
+    args.context.restore();
   }
 }

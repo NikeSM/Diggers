@@ -7,7 +7,7 @@ export class Resources {
   private static imageFolder: string = './images/';
 
   public static load(): void {
-    let imageArray = ['tank.png', 'wall.png', 'background.png', 'bullet.png', 'ground.png'];
+    let imageArray = ['tank_blue.png', 'wall.png', 'background.png', 'bullet.png', 'ground.png'];
     let imagePromises = imageArray.map(name => {
       return new Promise((resolve, reject) => {
         let img: HTMLImageElement = new Image();

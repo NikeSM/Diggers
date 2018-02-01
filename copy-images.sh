@@ -1,0 +1,1 @@
+find ./src/resources -name \*.png -print0 | xargs -I{} -0 cp -n -v {} ./public/images

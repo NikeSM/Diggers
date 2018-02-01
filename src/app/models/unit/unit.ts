@@ -189,6 +189,10 @@ export class Unit implements IUnit {
     return this.direction;
   }
 
+  public getSprite(): Sprite {
+    return this.sprite;
+  }
+
   public groundCollision(): void {
     this.speed.length() > this.underGroundSpeed && this.setSpeed(this.speed.setLength(this.underGroundSpeed));
   }
@@ -229,4 +233,5 @@ export interface IUnit {
   getDirection(): Vector;
   getNewPosition(deltaTime: number): Vector;
   getUnitPoints(): unitPoints;
+  getSprite(): Sprite;
 }

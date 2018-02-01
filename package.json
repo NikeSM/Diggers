@@ -10,7 +10,7 @@
   ],
   "scripts": {
     "build": "./node_modules/webpack/bin/webpack.js && cp index.html public/index.html",
-    "dev": "bash copy-images.sh && cp index.html public/index.html && ./node_modules/webpack-dev-server/bin/webpack-dev-server.js --progress --hot --inline --content-base public"
+    "dev": "bash copy-images.sh && cp -n index.html public/index.html && ./node_modules/webpack-dev-server/bin/webpack-dev-server.js --progress --hot --inline --content-base public"
   },
   "author": "",
   "license": "ISC",

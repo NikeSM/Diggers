@@ -1,6 +1,13 @@
 import { Resources } from '../../../resources';
 import { Vector } from '../math-models/vector';
 
+export enum imageDirection {
+  'UP',
+  'DOWN',
+  'RIGHT',
+  'LEFT'
+}
+
 export type spriteData = {
   spritePosition: Vector;
   size: Vector;
@@ -9,6 +16,7 @@ export type spriteData = {
   imageName?: string;
   isLoop?: boolean;
   isAnimation: boolean;
+  direction: imageDirection;
 }
 
 export class Sprite {
@@ -22,6 +30,7 @@ export class Sprite {
   private done: boolean;
   private isAnimation: boolean;
   private frame: number;
+  private direction: imageDirection;
 
   constructor(args: spriteData) {
     this.spritePosition = args.spritePosition;
@@ -32,6 +41,7 @@ export class Sprite {
     this.url = args.imageName;
     this.isLoop = args.isLoop;
     this.isAnimation = args.isAnimation;
+    this.direction = args.direction;
     this.draw = this.draw.bind(this);
     this.render = this.render.bind(this);
     this.update = this.update.bind(this);
@@ -73,5 +83,26 @@ export class Sprite {
       this.size.x, this.size.y, // размер на спрайте
       drawPoint.x, drawPoint.y, // координаты левого верхнего угла на канвасе
       drawSize.x, drawSize.y); // размер на канвасу
+  }
+
+  public getAngle(): number {
+    let angle = 0;
+    switch (this.direction) {
+      case imageDirection.DOWN:
+        angle =  -Math.PI / 2;
+        break;
+      case imageDirection.UP:
+        angle = Math.PI / 2;
+        break;
+      case imageDirection.LEFT:
+        angle = Math.PI;
+        break;
+      case imageDirection.RIGHT:
+        angle = 0;
+        break;
+      default:
+        angle = 0;
+    }
+    return angle
   }
 }

@@ -92,7 +92,8 @@ export class Unit implements IUnit {
 
   public update(deltaTime: number): void {
     this.setPosition(this.getNewPosition(deltaTime));
-    this.setSpeed(this.speed.add(this.accelerate.multiply(deltaTime)));
+    let speedAdd = this.accelerate.multiply(deltaTime);
+    this.setSpeed(this.speed.add(speedAdd));
     this.sprite.update(deltaTime);
   }
 
@@ -109,6 +110,7 @@ export class Unit implements IUnit {
       } else {
         this.setDirection(direction);
         this.setSpeed(this.direction.setLength(this.min_speed));
+        this.accelerate = new Vector(0, 0);
       }
     }
   }
@@ -116,11 +118,13 @@ export class Unit implements IUnit {
   public rotateLeft(): void {
     this.setDirection(new Vector(this.direction.y, -this.direction.x));
     this.setSpeed(this.direction.setLength(this.min_speed));
+    this.accelerate = new Vector(0, 0);
   }
 
   public rotateRight(): void {
     this.setDirection(new Vector(-this.direction.y, this.direction.x));
     this.setSpeed(this.direction.setLength(this.min_speed));
+    this.accelerate = new Vector(0, 0);
   }
 
   public forward(): void {
@@ -146,10 +150,6 @@ export class Unit implements IUnit {
     this.setPosition(this.position.add(this.direction.multiply(distance)));
   }
 
-  public render(context: CanvasRenderingContext2D): void {
-    this.sprite.render(context, this.getDrawPoint(), this.getRectangleSize());
-  }
-
   public getDrawPoint(): Vector {
     return new Vector(-this.size.x / 2, -this.size.y / 2);
   }
@@ -172,9 +172,13 @@ export class Unit implements IUnit {
   }
 
   public setSpeed(value: Vector): void {
-    let speed = value.length() < this.max_speed ? value : value.setLength(this.max_speed);
-    speed = speed.length() > this.min_speed ? speed : speed.setLength(this.min_speed);
-    this.speed = speed;
+    let newSpeed = value.length() < this.max_speed ? value : value.setLength(this.max_speed);
+    newSpeed = newSpeed.length() > this.min_speed ? newSpeed : newSpeed.setLength(this.min_speed);
+    newSpeed = new Vector(+newSpeed.x.toFixed(2), +newSpeed.y.toFixed(2));
+    if (this.speed && newSpeed.x !== 0 && newSpeed.y !== 0) {
+      console.error(this.speed, newSpeed);
+    }
+    this.speed = newSpeed;
   }
 
   public getId(): string {
@@ -207,12 +211,15 @@ export class Unit implements IUnit {
   }
 
   private setPosition(position: Vector): void {
-    this.position = position;
+    let newPosition = new Vector(+position.x.toFixed(2), +position.y.toFixed(2));
+    if (newPosition.x !== this.position.x && newPosition.y !== this.position.y) {
+      console.error(this.position, newPosition);
+    }
+    this.position = newPosition;
   }
 }
 
 export interface IUnit {
-  render(context: CanvasRenderingContext2D): void;
   update(deltaTime: number): void;
   rotate(direction: Vector): void;
   rotateLeft(): void;

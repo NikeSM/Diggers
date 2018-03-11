@@ -21,7 +21,7 @@ export let defaultWallOptions: wallOptions = {
     accelerate_module: 0,
     max_speed: 0,
     min_speed: 0,
-    size: new Vector(10, 10),
+    size: new Vector(20, 20),
     immortal: true,
     health: 100
   }

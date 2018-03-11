@@ -20,9 +20,9 @@ export let defaultBulletOptions = {
     name: 'bullet',
     position: new Vector(0, 0),
     direction: Direction.RIGHT,
-    size: new Vector(5, 5),
-    max_speed: 200,
-    min_speed: 200,
+    size: new Vector(10, 10),
+    max_speed: 50,
+    min_speed: 50,
     accelerate_module: 5,
     immortal: false,
     health: 100

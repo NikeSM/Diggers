@@ -41,21 +41,10 @@ export class Renderer {
   }
 
 
-  private static renderEntities(list: Array<IUnit>, context: CanvasRenderingContext2D): void {
-    for (let i = 0; i < list.length; i++) {
-      Renderer.renderEntity(list[i], context);
+  private static renderEntities(entities: Array<IUnit>, context: CanvasRenderingContext2D): void {
+    for (let i = 0; i < entities.length; i++) {
+      Renderer.renderEntity(entities[i], context);
     }
-  }
-
- private renderBackground(): void {
-   Renderer.renderObject({
-     context: this.contexts.background,
-     position: new Vector(0, 0),
-     direction: 0,
-     sprite: Resources.getImages().backgrounds.background,
-     drawPoint: new Vector(0, 0),
-     size: new Vector(500, 500)
-   });
   }
 
   private renderStaticObjects(): void {
@@ -80,5 +69,16 @@ export class Renderer {
     args.context.rotate(args.direction);
     args.sprite.render(args.context, args.drawPoint, args.size);
     args.context.restore();
+  }
+
+  private renderBackground(): void {
+    Renderer.renderObject({
+      context: this.contexts.background,
+      position: new Vector(0, 0),
+      direction: 0,
+      sprite: Resources.getImages().backgrounds.background,
+      drawPoint: new Vector(0, 0),
+      size: new Vector(500, 500)
+    });
   }
 }

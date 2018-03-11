@@ -103,6 +103,6 @@ export class Sprite {
       default:
         angle = 0;
     }
-    return angle
+    return angle;
   }
 }

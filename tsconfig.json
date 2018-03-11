@@ -5,6 +5,7 @@
     "declaration": false,
     "outDir": "./build",
     "moduleResolution": "node",
+    "sourceMap": true,
     "rootDir": "./src"
   },
   "files": [

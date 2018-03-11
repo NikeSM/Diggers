@@ -48,7 +48,7 @@ export class Map {
       unitOptions: {
         name: 'Player',
         position: new Vector(200, 200),
-        size: new Vector(50, 50),
+        size: new Vector(20, 20),
         max_speed: 200,
         min_speed: 0,
         sprite: Resources.getImages().tanks.tank,
@@ -59,19 +59,19 @@ export class Map {
       },
       bulletOptions: defaultBulletOptions
     }));
-    for (let i = 0; i < 50; i++) {
+    for (let i = 0; i < 25; i++) {
       let wallOptions = {
         unitOptions: {
           sprite: Resources.getImages().walls.wall,
-          position: new Vector(5, i * 10 + 5)
+          position: new Vector(10, i * 20 + 10)
         }
       };
       this.gameState.addStaticUnit(new Wall(wallOptions));
-      wallOptions.unitOptions.position = new Vector(495, i * 10 + 5);
+      wallOptions.unitOptions.position = new Vector(490, i * 20 + 10);
       this.gameState.addStaticUnit(new Wall(wallOptions));
-      wallOptions.unitOptions.position = new Vector(i * 10 + 5, 5);
+      wallOptions.unitOptions.position = new Vector(i * 20 + 10, 10);
       this.gameState.addStaticUnit(new Wall(wallOptions));
-      wallOptions.unitOptions.position = new Vector(i * 10 + 5, 495);
+      wallOptions.unitOptions.position = new Vector(i * 20 + 10, 490);
       this.gameState.addStaticUnit(new Wall(wallOptions));
     }
     this.gameState.getAllUnits().map(unit => this.positionMap.setUnitPositionMap(unit));

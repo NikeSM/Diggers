@@ -68,7 +68,7 @@ export class Tank extends Unit implements ITank {
         direction: this.getDirection(),
         position:  new Vector(this.getPosition().x, this.getPosition().y)
           .add(
-            this.getDirection().setLength(this.getRectangleSize().x / 2 + this.bulletOptions.unitOptions.size.x / 2 + 5)
+            this.getDirection().setLength(this.getRectangleSize().x / 2 + this.bulletOptions.unitOptions.size.x / 2 + 1)
           )
       }
     });
